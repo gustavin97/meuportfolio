@@ -1,0 +1,111 @@
+/* 
+  ==========================================
+  RESET.CSS
+  ==========================================
+  Responsável por remover estilos padrão dos navegadores
+  e padronizar comportamento inicial de todos os elementos.
+  Garante consistência cross-browser.
+  ==========================================
+*/
+
+/* Reset de margens e paddings padrão */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reset de estilos de lista */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Reset de links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Reset de botões */
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+/* Reset de inputs e textareas */
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+/* Remove outline padrão em foco */
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+  outline: none;
+}
+
+/* Remove input number arrows */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Remove autocomplete styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+/* Remove images dentro de button */
+button img {
+  pointer-events: none;
+}
+
+/* Remove hr styling */
+hr {
+  border: none;
+  background: none;
+}
+
+/* Remove table borders padrão */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Remove image borders em IE */
+img {
+  border: none;
+  display: block;
+}
+
+/* Prevent text selection em elementos interativos */
+button,
+a {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

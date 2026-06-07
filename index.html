@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO -->
+    <meta name="description" content="Portfólio profissional de DEV GUZ. Desenvolvedor Full Stack criando soluções digitais modernas para web, e-commerce e experiências inovadoras.">
+    <meta name="keywords" content="desenvolvedor, frontend, backend, full stack, react, node.js, web, portfólio">
+    <meta name="author" content="DEV GUZ">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#050505">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://devguz.com">
+    <meta property="og:title" content="DEV GUZ - Desenvolvedor Full Stack">
+    <meta property="og:description" content="Desenvolvedor Full Stack criando soluções digitais modernas para web, e-commerce e experiências inovadoras.">
+    <meta property="og:image" content="https://devguz.com/og-image.jpg">
+    <meta property="og:site_name" content="DEV GUZ Portfolio">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DEV GUZ - Desenvolvedor Full Stack">
+    <meta name="twitter:description" content="Desenvolvedor Full Stack criando soluções digitais modernas para web, e-commerce e experiências inovadoras.">
+    <meta name="twitter:image" content="https://devguz.com/og-image.jpg">
+    
+    <!-- Title -->
+    <title>DEV GUZ - Desenvolvedor Full Stack | Portfólio Profissional</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Global -->
+    <link rel="stylesheet" href="css/global/reset.css">
+    <link rel="stylesheet" href="css/global/variables.css">
+    <link rel="stylesheet" href="css/global/global.css">
+    <link rel="stylesheet" href="css/global/animations.css">
+    
+    <!-- CSS Layout -->
+    <link rel="stylesheet" href="css/layout/header.css">
+    <link rel="stylesheet" href="css/layout/footer.css">
+    
+    <!-- CSS Sections -->
+    <link rel="stylesheet" href="css/sections/hero.css">
+    <link rel="stylesheet" href="css/sections/sobre.css">
+    <link rel="stylesheet" href="css/sections/jornada.css">
+    <link rel="stylesheet" href="css/sections/formacoes.css">
+    <link rel="stylesheet" href="css/sections/tecnologias.css">
+    <link rel="stylesheet" href="css/sections/plataformas.css">
+    <link rel="stylesheet" href="css/sections/projetos.css">
+    <link rel="stylesheet" href="css/sections/contato.css">
+</head>
+<body>
+    <!-- ====================================
+         HEADER
+         ==================================== -->
+    <header>
+        <div class="header-content">
+            <!-- Logo -->
+            <div class="header-logo">DEV GUZ</div>
+            
+            <!-- Navegação Desktop -->
+            <nav>
+                <a href="#hero">Início</a>
+                <a href="#about">Sobre</a>
+                <a href="#timeline">Jornada</a>
+                <a href="#formations">Formações</a>
+                <a href="#technologies">Tecnologias</a>
+                <a href="#projects">Projetos</a>
+                <a href="#contact">Contato</a>
+            </nav>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" aria-label="Abrir menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu">
+            <a href="#hero">Início</a>
+            <a href="#about">Sobre</a>
+            <a href="#timeline">Jornada</a>
+            <a href="#formations">Formações</a>
+            <a href="#technologies">Tecnologias</a>
+            <a href="#projects">Projetos</a>
+            <a href="#contact">Contato</a>
+        </div>
+    </header>
+    
+    <main>
+        <!-- ====================================
+             HERO SECTION
+             ==================================== -->
+        <section id="hero">
+            <!-- Background Effects -->
+            <div class="hero-background">
+                <div class="hero-gradient"></div>
+                <div class="hero-gradient"></div>
+                <div class="hero-gradient"></div>
+            </div>
+            
+            <div class="hero-container">
+                <!-- Hero Content -->
+                <div class="hero-content">
+                    <h1>
+                        <span class="hero-title-primary">DEV GUZ</span>
+                        <span class="hero-title-secondary">Desenvolvedor Full Stack</span>
+                    </h1>
+                    
+                    <p class="hero-subtitle">Criando soluções digitais modernas para web, automações, e-commerce e experiências inovadoras.</p>
+                    
+                    <p class="hero-description">
+                        Com experiência em tecnologias modernas e uma paixão por criar interfaces incríveis, transformo ideias em realidade digital.
+                    </p>
+                    
+                    <!-- Buttons -->
+                    <div class="hero-buttons">
+                        <button class="btn-primary-hero" onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'})">Ver Projetos</button>
+                        <button class="btn-secondary-hero" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Entrar em Contato</button>
+                    </div>
+                </div>
+                
+                <!-- 3D Container (preparado para Three.js) -->
+                <div class="hero-3d-container">
+                    <div class="hero-3d-placeholder">
+                        Espaço reservado para objeto 3D
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator">
+                <p>Scroll para continuar</p>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+            </div>
+        </section>
+        
+        <!-- ====================================
+             ABOUT SECTION
+             ==================================== -->
+        <section id="about">
+            <div class="container">
+                <h2 class="section-title">Sobre <span>o Dev Guz</span></h2>
+                
+                <div class="about-container">
+                    <!-- Coluna Esquerda: Conteúdo -->
+                    <div class="about-content">
+                        <h3>Minha Jornada</h3>
+                        <p>
+                            Sou um desenvolvedor apaixonado por tecnologia, desenvolvimento web e criação de soluções digitais.
+                        </p>
+                        <p>
+                            Minha jornada começou através dos estudos em desenvolvimento de software e evoluiu para projetos reais envolvendo e-commerce, automações, integrações e experiências digitais modernas.
+                        </p>
+                        <p>
+                            Atualmente atuo desenvolvendo projetos web, estudando tecnologias modernas do mercado e aprimorando constantemente minhas habilidades para entregar soluções eficientes, modernas e escaláveis.
+                        </p>
+                        
+                        <!-- Highlights -->
+                        <div class="about-highlights">
+                            <div class="highlight-card">
+                                <h4>+5</h4>
+                                <p>Projetos Entregues</p>
+                            </div>
+                            <div class="highlight-card">
+                                <h4>3+</h4>
+                                <p>Anos Experiência</p>
+                            </div>
+                            <div class="highlight-card">
+                                <h4>100%</h4>
+                                <p>Cliente Satisfeitos</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coluna Direita: Galeria -->
+                    <div class="about-gallery">
+                        <div class="gallery-item">
+                            <div class="gallery-placeholder">Foto 1</div>
+                        </div>
+                        <div class="gallery-item">
+                            <div class="gallery-placeholder">Foto 2</div>
+                        </div>
+                        <div class="gallery-item">
+                            <div class="gallery-placeholder">Foto 3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ====================================
+             TIMELINE / JORNADA SECTION
+             ==================================== -->
+        <section id="timeline">
+            <div class="container">
+                <h2 class="section-title">Minha <span>Jornada Profissional</span></h2>
+                
+                <div class="timeline-container">
+                    <div class="timeline">
+                        <!-- Timeline Item 1 -->
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">2021</div>
+                                <h3>Início dos Estudos em Programação</h3>
+                                <p>Comecei minha jornada aprendendo HTML, CSS e JavaScript, descobrindo minha paixão por desenvolvimento web.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Timeline Item 2 -->
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">2022</div>
+                                <h3>Primeiros Projetos Pessoais</h3>
+                                <p>Desenvolvi meus primeiros projetos completos, consolidando conhecimentos em front-end e explorando back-end.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Timeline Item 3 -->
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">2023</div>
+                                <h3>Primeiros Trabalhos Freelance</h3>
+                                <p>Iniciei trabalhos como freelancer, desenvolvendo sites e aplicações para pequenos negócios.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Timeline Item 4 -->
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">2024</div>
+                                <h3>Projetos em E-commerce</h3>
+                                <p>Trabalho especializado em plataformas de e-commerce como Shopify, Nuvemshop e integrações complexas.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Timeline Item 5 -->
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">2025</div>
+                                <h3>Estudos em Automação e IA</h3>
+                                <p>Explorando novas fronteiras com automação, n8n, integração de IA e experiências inovadoras.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ====================================
+             FORMATIONS SECTION
+             ==================================== -->
+        <section id="formations">
+            <div class="container">
+                <h2 class="section-title">Minhas <span>Formações</span></h2>
+                
+                <div class="formations-container">
+                    <div class="formations-grid">
+                        <!-- Formation Card 1 -->
+                        <div class="formation-card">
+                            <div class="formation-image">
+                                <div class="formation-image-placeholder">📚 ADS</div>
+                            </div>
+                            <div class="formation-content">
+                                <h3 class="formation-name">Análise e Desenvolvimento de Sistemas</h3>
+                                <p class="formation-institution">FATEC - 4º Período</p>
+                                <p class="formation-description">Formação acadêmica em análise de sistemas, desenvolvimento de software e arquitetura de soluções.</p>
+                                <span class="formation-badge">Em Progresso</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Formation Card 2 -->
+                        <div class="formation-card">
+                            <div class="formation-image">
+                                <div class="formation-image-placeholder">🚀 Full Stack</div>
+                            </div>
+                            <div class="formation-content">
+                                <h3 class="formation-name">Programação Full Stack</h3>
+                                <p class="formation-institution">Rocketseat</p>
+                                <p class="formation-description">Bootcamp imersivo em desenvolvimento web full stack com React, Node.js e tecnologias modernas.</p>
+                                <span class="formation-badge">Concluído</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Formation Card 3 -->
+                        <div class="formation-card">
+                            <div class="formation-image">
+                                <div class="formation-image-placeholder">🎨 Front-End</div>
+                            </div>
+                            <div class="formation-content">
+                                <h3 class="formation-name">Programação Front-End</h3>
+                                <p class="formation-institution">DIO</p>
+                                <p class="formation-description">Formação avançada em tecnologias front-end, design responsivo e experiência do usuário.</p>
+                                <span class="formation-badge">Concluído</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Formation Card 4 -->
+                        <div class="formation-card">
+                            <div class="formation-image">
+                                <div class="formation-image-placeholder">⚙️ Automação</div>
+                            </div>
+                            <div class="formation-content">
+                                <h3 class="formation-name">Automação com n8n</h3>
+                                <p class="formation-institution">Hashtag Treinamentos</p>
+                                <p class="formation-description">Especialização em automação de processos, integrações e workflows com n8n.</p>
+                                <span class="formation-badge">Concluído</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ====================================
+             TECHNOLOGIES SECTION
+             ==================================== -->
+        <section id="technologies">
+            <div class="container">
+                <h2 class="section-title">Minhas <span>Tecnologias</span></h2>
+                
+                <div class="technologies-container">
+                    <!-- TECNOLOGIAS -->
+                    <div class="tech-category category-tecnologias">
+                        <h3 class="tech-category-title">Tecnologias</h3>
+                        <div class="tech-grid">
+                            <div class="tech-item">
+                                <div class="tech-icon">📄</div>
+                                <div class="tech-name">HTML</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🎨</div>
+                                <div class="tech-name">CSS</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">⚡</div>
+                                <div class="tech-name">JavaScript</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">📘</div>
+                                <div class="tech-name">TypeScript</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">⚛️</div>
+                                <div class="tech-name">React</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🌪️</div>
+                                <div class="tech-name">Tailwind CSS</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🟢</div>
+                                <div class="tech-name">Node.js</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">⚙️</div>
+                                <div class="tech-name">n8n</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">✨</div>
+                                <div class="tech-name">GSAP</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🎯</div>
+                                <div class="tech-name">Three.js</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🐳</div>
+                                <div class="tech-name">Docker</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">💾</div>
+                                <div class="tech-name">SQLite</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">☁️</div>
+                                <div class="tech-name">Supabase</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- IAs -->
+                    <div class="tech-category category-ias">
+                        <h3 class="tech-category-title">IAs</h3>
+                        <div class="tech-grid">
+                            <div class="tech-item">
+                                <div class="tech-icon">🤖</div>
+                                <div class="tech-name">ChatGPT</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🧠</div>
+                                <div class="tech-name">Manus</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">✨</div>
+                                <div class="tech-name">Gemini</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">💻</div>
+                                <div class="tech-name">Claude Code</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🔮</div>
+                                <div class="tech-name">Codex</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🌊</div>
+                                <div class="tech-name">DeepSeek</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- FERRAMENTAS -->
+                    <div class="tech-category category-ferramentas">
+                        <h3 class="tech-category-title">Ferramentas</h3>
+                        <div class="tech-grid">
+                            <div class="tech-item">
+                                <div class="tech-icon">💻</div>
+                                <div class="tech-name">Visual Studio Code</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🎨</div>
+                                <div class="tech-name">Figma</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🖼️</div>
+                                <div class="tech-name">Canva</div>
+                            </div>
+                            <div class="tech-item">
+                                <div class="tech-icon">🚀</div>
+                                <div class="tech-name">Antigravity</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ====================================
+             PLATFORMS SECTION
+             ==================================== -->
+        <section id="platforms">
+            <div class="container">
+                <h2 class="section-title">Plataformas que <span>Desenvolvo</span></h2>
+                
+                <div class="platforms-container">
+                    <div class="platforms-grid">
+                        <!-- Platform Card 1 -->
+                        <div class="platform-card">
+                            <div class="platform-logo">
+                                <div class="platform-logo-placeholder">WordPress</div>
+                            </div>
+                            <div class="platform-content">
+                                <h3 class="platform-name">WordPress</h3>
+                                <p class="platform-description">Desenvolvimento de sites e blogs com WordPress, temas customizados e plugins otimizados.</p>
+                                <span class="platform-badge">CMS</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Platform Card 2 -->
+                        <div class="platform-card">
+                            <div class="platform-logo">
+                                <div class="platform-logo-placeholder">Nuvemshop</div>
+                            </div>
+                            <div class="platform-content">
+                                <h3 class="platform-name">Nuvemshop</h3>
+                                <p class="platform-description">Lojas virtuais totalmente integradas, automações e otimizações para conversão.</p>
+                                <span class="platform-badge">E-commerce</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Platform Card 3 -->
+                        <div class="platform-card">
+                            <div class="platform-logo">
+                                <div class="platform-logo-placeholder">Tray</div>
+                            </div>
+                            <div class="platform-content">
+                                <h3 class="platform-name">Tray</h3>
+                                <p class="platform-description">Plataforma enterprise de e-commerce com customizações avançadas e integrações.</p>
+                                <span class="platform-badge">E-commerce</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Platform Card 4 -->
+                        <div class="platform-card">
+                            <div class="platform-logo">
+                                <div class="platform-logo-placeholder">Shopify</div>
+                            </div>
+                            <div class="platform-content">
+                                <h3 class="platform-name">Shopify</h3>
+                                <p class="platform-description">Lojas de alto desempenho com tema customizado, apps e otimizações.</p>
+                                <span class="platform-badge">E-commerce</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Platform Card 5 -->
+                        <div class="platform-card">
+                            <div class="platform-logo">
+                                <div class="platform-logo-placeholder">Bagy</div>
+                            </div>
+                            <div class="platform-content">
+                                <h3 class="platform-name">Bagy</h3>
+                                <p class="platform-description">Plataforma brasileira de marketplace com integração e customizações.</p>
+                                <span class="platform-badge">Marketplace</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ====================================
+             PROJECTS SECTION
+             ==================================== -->
+        <section id="projects">
+            <div class="container">
+                <h2 class="section-title">Meus <span>Projetos</span></h2>
+                
+                <div class="projects-wrapper">
+                    <div class="projects-carousel">
+                        <!-- Project Card 1 -->
+                        <div class="project-card">
+                            <div class="project-image">
+                                <div class="project-image-placeholder">Projeto 1</div>
+                            </div>
+                            <div class="project-content">
+                                <span class="project-category">E-commerce</span>
+                                <h3 class="project-name">Loja Virtual Premium</h3>
+                                <p class="project-description">Plataforma de e-commerce com integração de pagamento, gestão de estoque e dashboard administrativo.</p>
+                                <div class="project-tags">
+                                    <span class="project-tag">React</span>
+                                    <span class="project-tag">Node.js</span>
+                                    <span class="project-tag">Stripe</span>
+                                </div>
+                                <a href="#" class="project-link">Ver Projeto</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Project Card 2 -->
+                        <div class="project-card">
+                            <div class="project-image">
+                                <div class="project-image-placeholder">Projeto 2</div>
+                            </div>
+                            <div class="project-content">
+                                <span class="project-category">Web App</span>
+                                <h3 class="project-name">Plataforma de Gestão</h3>
+                                <p class="project-description">Aplicação web completa para gestão de tarefas, clientes e relatórios com autenticação segura.</p>
+                                <div class="project-tags">
+                                    <span class="project-tag">React</span>
+                                    <span class="project-tag">TypeScript</span>
+                                    <span class="project-tag">Firebase</span>
+                                </div>
+                                <a href="#" class="project-link">Ver Projeto</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Project Card 3 -->
+                        <div class="project-card">
+                            <div class="project-image">
+                                <div class="project-image-placeholder">Projeto 3</div>
+                            </div>
+                            <div class="project-content">
+                                <span class="project-category">Landing Page</span>
+                                <h3 class="project-name">Landing Page Conversão</h3>
+                                <p class="project-description">Página otimizada para conversão com design moderno, animações e integração com funil de vendas.</p>
+                                <div class="project-tags">
+                                    <span class="project-tag">HTML</span>
+                                    <span class="project-tag">CSS</span>
+                                    <span class="project-tag">JavaScript</span>
+                                </div>
+                                <a href="#" class="project-link">Ver Projeto</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Project Card 4 -->
+                        <div class="project-card">
+                            <div class="project-image">
+                                <div class="project-image-placeholder">Projeto 4</div>
+                            </div>
+                            <div class="project-content">
+                                <span class="project-category">Automação</span>
+                                <h3 class="project-name">Sistema de Automação</h3>
+                                <p class="project-description">Solução de automação de processos com n8n, integrando múltiplas APIs e bases de dados.</p>
+                                <div class="project-tags">
+                                    <span class="project-tag">n8n</span>
+                                    <span class="project-tag">APIs</span>
+                                    <span class="project-tag">Zapier</span>
+                                </div>
+                                <a href="#" class="project-link">Ver Projeto</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ====================================
+             CONTACT SECTION
+             ==================================== -->
+        <section id="contact">
+            <div class="container">
+                <h2 class="section-title">Entre em <span>Contato</span></h2>
+                
+                <div class="contact-container">
+                    <div class="contact-intro">
+                        <p>Tem um projeto em mente ou gostaria de conversar? Deixe uma mensagem e entrarei em contato em breve.</p>
+                    </div>
+                    
+                    <!-- Contact Form -->
+                    <form class="contact-form" name="contact">
+                        <div class="form-group">
+                            <label for="name">Nome *</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                placeholder="Seu nome"
+                                required
+                            >
+                            <span class="form-error">Nome deve ter entre 3 e 100 caracteres</span>
+                            <span class="form-success">✓ Nome válido</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-mail *</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                placeholder="seu.email@exemplo.com"
+                                required
+                            >
+                            <span class="form-error">E-mail inválido</span>
+                            <span class="form-success">✓ E-mail válido</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Mensagem *</label>
+                            <textarea 
+                                id="message" 
+                                name="message" 
+                                placeholder="Sua mensagem aqui..."
+                                minlength="10"
+                                maxlength="1000"
+                                required
+                            ></textarea>
+                            <span class="form-error">Mensagem deve ter entre 10 e 1000 caracteres</span>
+                            <span class="form-success">✓ Mensagem válida</span>
+                        </div>
+                        
+                        <div class="form-submit">
+                            <button type="submit">Enviar Mensagem</button>
+                        </div>
+                    </form>
+                    
+                    <!-- Contact Info -->
+                    <div class="contact-info">
+                        <div class="contact-info-item">
+                            <h3 class="contact-info-title">WhatsApp</h3>
+                            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
+                                +55 (11) 99999-9999
+                            </a>
+                        </div>
+                        
+                        <div class="contact-info-item">
+                            <h3 class="contact-info-title">E-mail</h3>
+                            <a href="mailto:contato@devguz.com">
+                                contato@devguz.com
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- ====================================
+         FOOTER
+         ==================================== -->
+    <footer>
+        <div class="footer-content">
+            <!-- Redes Sociais -->
+            <div class="footer-section">
+                <h3>Redes Sociais</h3>
+                <div class="social-links">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.016 12.016 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.081 0-1.722.725-2.004 1.424-.103.25-.129.599-.129.949v5.432h-3.554s.05-8.736 0-9.646h3.554v1.364c.42-.648 1.36-1.573 3.322-1.573 2.429 0 4.25 1.574 4.25 4.963v5.892zM5.337 8.855c-1.144 0-1.915-.758-1.915-1.7 0-.943.77-1.701 1.97-1.701 1.197 0 1.914.758 1.938 1.701 0 .942-.74 1.7-1.993 1.7zm1.581 11.597H3.714V9.606h3.204v10.846zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.057-1.645.069-4.849.069-3.204 0-3.584-.012-4.849-.069-3.259-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 100-8 4 4 0 000 8zm4.965-10.322a1.44 1.44 0 110-2.881 1.44 1.44 0 010 2.881z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Links Rápidos -->
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <div class="footer-links">
+                    <a href="#hero">Início</a>
+                    <a href="#about">Sobre</a>
+                    <a href="#projects">Projetos</a>
+                    <a href="#contact">Contato</a>
+                </div>
+            </div>
+            
+            <!-- Contato -->
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="footer-links">
+                    <div class="contact-item">
+                        <a href="tel:+5511999999999">+55 (11) 99999-9999</a>
+                    </div>
+                    <div class="contact-item">
+                        <a href="mailto:contato@devguz.com">contato@devguz.com</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Endereço -->
+            <div class="footer-section">
+                <h3>Localização</h3>
+                <div class="address-section">
+                    <strong>São Paulo - SP</strong>
+                    <p class="address-item">Desenvolvedor Full Stack</p>
+                    <p class="address-item">Criando soluções digitais modernas</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>&copy; 2025 DEV GUZ. Todos os direitos reservados.</p>
+            <p class="footer-credits">
+                Desenvolvido com <span>❤️</span> por <a href="#">DEV GUZ</a>
+            </p>
+        </div>
+    </footer>
+    
+    <!-- ====================================
+         SCRIPTS
+         ==================================== -->
+    
+    <!-- Core JavaScript -->
+    <script src="js/core/main.js"></script>
+    
+    <!-- Components -->
+    <script src="js/components/header.js"></script>
+    <script src="js/components/carousel.js"></script>
+    <script src="js/components/form.js"></script>
+    
+    <!-- Sections -->
+    <script src="js/sections/hero.js"></script>
+    <script src="js/sections/sobre.js"></script>
+    <script src="js/sections/tecnologias.js"></script>
+    <script src="js/sections/projetos.js"></script>
+    <script src="js/sections/contato.js"></script>
+    
+    <!-- Structured Data (JSON-LD) para SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "DEV GUZ",
+        "jobTitle": "Desenvolvedor Full Stack",
+        "url": "https://devguz.com",
+        "sameAs": [
+            "https://github.com",
+            "https://linkedin.com",
+            "https://instagram.com"
+        ],
+        "image": "https://devguz.com/profile-image.jpg",
+        "description": "Desenvolvedor Full Stack criando soluções digitais modernas para web, e-commerce e experiências inovadoras.",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+55-11-99999-9999",
+            "email": "contato@devguz.com",
+            "contactType": "Customer Service"
+        }
+    }
+    </script>
+</body>
+</html>

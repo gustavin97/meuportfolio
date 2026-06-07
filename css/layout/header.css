@@ -1,0 +1,210 @@
+/* 
+  ==========================================
+  HEADER.CSS
+  ==========================================
+  Estilos do componente Header (cabeçalho).
+  Header fixo com navegação e menu.
+  Preparado para glassmorphism e blur effects no futuro.
+  ==========================================
+*/
+
+/* ==== HEADER CONTAINER ==== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: var(--color-black-transparent);
+  backdrop-filter: blur(0px);
+  border-bottom: 1px solid transparent;
+  z-index: var(--z-fixed);
+  transition: all var(--transition-base);
+}
+
+/* Preparado para estado ao fazer scroll */
+header.scrolled {
+  border-bottom-color: var(--color-white-transparent);
+  background: rgba(5, 5, 5, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+/* ==== HEADER CONTENT ==== */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .header-content {
+    padding: 0 var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-content {
+    padding: 0 var(--space-10);
+    max-width: 1536px;
+  }
+}
+
+/* ==== LOGO ==== */
+.header-logo {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  background: var(--gradient-green-blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  cursor: pointer;
+  transition: transform var(--transition-base);
+}
+
+.header-logo:hover {
+  transform: scale(1.05);
+}
+
+/* ==== NAVEGAÇÃO ==== */
+nav {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  nav {
+    display: flex;
+    gap: var(--space-8);
+  }
+}
+
+nav a {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray);
+  position: relative;
+  transition: color var(--transition-base);
+}
+
+nav a:hover {
+  color: var(--color-neon-green);
+}
+
+/* Underline hover effect */
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-green-blue);
+  transition: width var(--transition-base);
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* ==== MOBILE MENU BUTTON ==== */
+.mobile-menu-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: var(--z-dropdown);
+}
+
+@media (min-width: 768px) {
+  .mobile-menu-btn {
+    display: none;
+  }
+}
+
+.mobile-menu-btn span {
+  width: 25px;
+  height: 3px;
+  background: var(--color-neon-green);
+  border-radius: 2px;
+  transition: all var(--transition-base);
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(10px, 10px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* ==== MOBILE MENU ==== */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  background: var(--color-dark-bg);
+  border-bottom: 1px solid var(--color-white-transparent);
+  padding: var(--space-6) var(--space-4);
+  z-index: var(--z-dropdown);
+}
+
+@media (min-width: 768px) {
+  .mobile-menu {
+    display: none !important;
+  }
+}
+
+.mobile-menu.active {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.mobile-menu a {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-white-transparent);
+  transition: color var(--transition-base);
+}
+
+.mobile-menu a:hover {
+  color: var(--color-neon-green);
+}
+
+/* ==== ESPACER PARA CONTEÚDO ==== */
+main {
+  margin-top: 70px;
+}
+
+/* ==== RESPONSIVIDADE ==== */
+@media (max-width: 767px) {
+  header {
+    height: 60px;
+  }
+
+  .header-content {
+    padding: 0 var(--space-4);
+  }
+
+  .header-logo {
+    font-size: var(--font-size-xl);
+  }
+
+  main {
+    margin-top: 60px;
+  }
+}

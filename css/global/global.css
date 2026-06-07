@@ -1,0 +1,333 @@
+/* 
+  ==========================================
+  GLOBAL.CSS
+  ==========================================
+  Estilos globais do projeto.
+  Define comportamento padrão de elementos HTML,
+  tipografia base e classes utilitárias.
+  ==========================================
+*/
+
+/* ==== BODY ==== */
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--color-white);
+  background-color: var(--color-black);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==== TIPOGRAFIA BASE ==== */
+h1 {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h2 {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h3 {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+}
+
+h4 {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+}
+
+h5 {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+}
+
+h6 {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+}
+
+p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-gray);
+}
+
+/* ==== LINKS ==== */
+a {
+  color: var(--color-neon-green);
+  transition: color var(--transition-base);
+}
+
+a:hover {
+  color: var(--color-neon-blue);
+}
+
+/* ==== SEÇÕES ==== */
+section {
+  width: 100%;
+  padding: var(--space-20) var(--space-4);
+}
+
+@media (min-width: 768px) {
+  section {
+    padding: var(--space-28) var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  section {
+    padding: var(--space-32) var(--space-10);
+  }
+}
+
+/* ==== CONTAINER ==== */
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+    padding: 0 var(--space-6);
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+    padding: 0 var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+    padding: 0 var(--space-10);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+    padding: 0 var(--space-12);
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+    padding: 0 var(--space-16);
+  }
+}
+
+/* ==== GRID E FLEX ==== */
+.grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ==== BOTÕES BASE ==== */
+button {
+  cursor: pointer;
+  transition: all var(--transition-base);
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  padding: var(--space-3) var(--space-6);
+}
+
+.btn-primary {
+  background: var(--gradient-green-blue);
+  color: var(--color-black);
+  padding: var(--space-4) var(--space-8);
+  box-shadow: var(--shadow-neon-green);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-neon-blue);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  border: 2px solid var(--color-neon-blue);
+  color: var(--color-neon-blue);
+  padding: var(--space-3) var(--space-6);
+  background: transparent;
+}
+
+.btn-secondary:hover {
+  background: var(--color-blue-transparent);
+  box-shadow: var(--shadow-neon-blue);
+}
+
+/* ==== INPUTS ==== */
+input,
+textarea {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--color-dark-tertiary);
+  border-radius: var(--radius-lg);
+  background: var(--color-dark-bg);
+  color: var(--color-white);
+  font-family: var(--font-primary);
+  transition: all var(--transition-base);
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--color-neon-green);
+  box-shadow: 0 0 0 3px var(--color-green-transparent);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-gray);
+}
+
+/* ==== SCROLL ==== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neon-green);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neon-blue);
+}
+
+/* ==== SELEÇÃO DE TEXTO ==== */
+::selection {
+  background: var(--color-neon-green);
+  color: var(--color-black);
+}
+
+::-moz-selection {
+  background: var(--color-neon-green);
+  color: var(--color-black);
+}
+
+/* ==== ACESSIBILIDADE ==== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ==== FOCUS VISIBLE ==== */
+*:focus-visible {
+  outline: 2px solid var(--color-neon-green);
+  outline-offset: 2px;
+}
+
+/* ==== UTILITÁRIOS ==== */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mb-4 {
+  margin-bottom: var(--space-4);
+}
+
+.mt-4 {
+  margin-top: var(--space-4);
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.visible {
+  display: block !important;
+}

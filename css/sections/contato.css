@@ -1,0 +1,279 @@
+/* 
+  ==========================================
+  CONTATO.CSS
+  ==========================================
+  Estilos da seção "Contato".
+  Formulário simples e informações de contato.
+  Preparado para validação e integração futura.
+  ==========================================
+*/
+
+/* ==== CONTATO SECTION ==== */
+#contact {
+  background: linear-gradient(180deg, var(--color-black) 0%, rgba(0, 191, 255, 0.05) 100%);
+  padding: var(--space-20) var(--space-4);
+}
+
+@media (min-width: 768px) {
+  #contact {
+    padding: var(--space-28) var(--space-8);
+  }
+}
+
+/* ==== CONTACT CONTAINER ==== */
+.contact-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ==== CONTACT INTRO ==== */
+.contact-intro {
+  text-align: center;
+  margin-bottom: var(--space-12);
+  animation: slideInUp 0.8s ease-out;
+}
+
+.contact-intro p {
+  font-size: var(--font-size-lg);
+  color: var(--color-gray);
+  margin: 0;
+}
+
+/* ==== CONTACT FORM ==== */
+.contact-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  animation: slideInUp 0.8s ease-out;
+  animation-delay: 0.2s;
+  animation-fill-mode: both;
+}
+
+/* ==== FORM GROUP ==== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-group label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white);
+  display: block;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: var(--space-4);
+  border: 2px solid var(--color-white-transparent);
+  border-radius: var(--radius-lg);
+  background: var(--color-dark-bg);
+  color: var(--color-white);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  transition: all var(--transition-base);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-gray);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--color-neon-green);
+  background: var(--color-green-transparent);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+/* ==== FORM ERROR ==== */
+.form-group.error input,
+.form-group.error textarea {
+  border-color: #FF6B6B;
+  background: rgba(255, 107, 107, 0.05);
+}
+
+.form-error {
+  font-size: var(--font-size-xs);
+  color: #FF6B6B;
+  margin-top: var(--space-1);
+  display: none;
+}
+
+.form-group.error .form-error {
+  display: block;
+}
+
+/* ==== FORM SUCCESS ==== */
+.form-group.success input,
+.form-group.success textarea {
+  border-color: var(--color-neon-green);
+  background: var(--color-green-transparent);
+}
+
+.form-success {
+  font-size: var(--font-size-xs);
+  color: var(--color-neon-green);
+  margin-top: var(--space-1);
+  display: none;
+}
+
+.form-group.success .form-success {
+  display: block;
+}
+
+/* ==== TEXTAREA ==== */
+.form-group textarea {
+  resize: vertical;
+  min-height: 150px;
+  max-height: 400px;
+  font-family: var(--font-primary);
+}
+
+/* ==== SUBMIT BUTTON ==== */
+.form-submit {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-4);
+}
+
+.form-submit button {
+  width: 100%;
+  max-width: 300px;
+  padding: var(--space-4) var(--space-8);
+  background: var(--gradient-green-blue);
+  color: var(--color-black);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-neon-green);
+}
+
+.form-submit button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.form-submit button:active {
+  transform: translateY(-2px);
+}
+
+.form-submit button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.form-submit button.loading {
+  position: relative;
+  color: transparent;
+}
+
+.form-submit button.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-black);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: rotate 0.8s linear infinite;
+}
+
+/* ==== CONTACT INFO ==== */
+.contact-info {
+  margin-top: var(--space-16);
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--color-white-transparent);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  text-align: center;
+  animation: slideInUp 0.8s ease-out;
+  animation-delay: 0.4s;
+  animation-fill-mode: both;
+}
+
+@media (min-width: 640px) {
+  .contact-info {
+    grid-template-columns: repeat(2, 1fr);
+    text-align: left;
+  }
+}
+
+.contact-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.contact-info-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  color: var(--color-neon-green);
+}
+
+.contact-info-item a,
+.contact-info-item p {
+  font-size: var(--font-size-base);
+  color: var(--color-gray);
+  margin: 0;
+  transition: color var(--transition-base);
+}
+
+.contact-info-item a:hover {
+  color: var(--color-neon-green);
+}
+
+/* ==== MESSAGE NOTIFICATION ==== */
+.form-message {
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-6);
+  display: none;
+  animation: slideInDown 0.4s ease-out;
+}
+
+.form-message.show {
+  display: block;
+}
+
+.form-message.success {
+  background: var(--color-green-transparent);
+  border: 1px solid var(--color-neon-green);
+  color: var(--color-neon-green);
+}
+
+.form-message.error {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid #FF6B6B;
+  color: #FF6B6B;
+}
+
+/* ==== RESPONSIVIDADE ==== */
+@media (max-width: 767px) {
+  #contact {
+    padding: var(--space-16) var(--space-4);
+  }
+
+  .contact-form {
+    animation-delay: 0 !important;
+  }
+
+  .contact-info {
+    grid-template-columns: 1fr;
+    text-align: center;
+    animation-delay: 0 !important;
+  }
+
+  .contact-intro {
+    animation-delay: 0 !important;
+  }
+}
