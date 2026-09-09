@@ -1,333 +1,320 @@
-/* 
+/*
   ==========================================
   GLOBAL.CSS
   ==========================================
-  Estilos globais do projeto.
-  Define comportamento padrão de elementos HTML,
-  tipografia base e classes utilitárias.
+  Base do documento, tipografia, layout de seção
+  e primitivas reutilizáveis (container, título,
+  botão, badge, mídia).
   ==========================================
 */
 
-/* ==== BODY ==== */
+/* ==================== DOCUMENTO ==================== */
+
 body {
-  font-family: var(--font-primary);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-normal);
-  color: var(--color-white);
   background-color: var(--color-black);
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* ==== TIPOGRAFIA BASE ==== */
-h1 {
-  font-family: var(--font-secondary);
-  font-size: var(--font-size-5xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-h2 {
-  font-family: var(--font-secondary);
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-h3 {
-  font-family: var(--font-secondary);
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-normal);
-}
-
-h4 {
-  font-family: var(--font-secondary);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-normal);
-}
-
-h5 {
-  font-family: var(--font-secondary);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-normal);
-}
-
-h6 {
-  font-family: var(--font-secondary);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-normal);
-}
-
-p {
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-relaxed);
-  color: var(--color-gray);
-}
-
-/* ==== LINKS ==== */
-a {
-  color: var(--color-neon-green);
-  transition: color var(--transition-base);
-}
-
-a:hover {
-  color: var(--color-neon-blue);
-}
-
-/* ==== SEÇÕES ==== */
-section {
-  width: 100%;
-  padding: var(--space-20) var(--space-4);
-}
-
-@media (min-width: 768px) {
-  section {
-    padding: var(--space-28) var(--space-8);
-  }
-}
-
-@media (min-width: 1024px) {
-  section {
-    padding: var(--space-32) var(--space-10);
-  }
-}
-
-/* ==== CONTAINER ==== */
-.container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0 var(--space-4);
-}
-
-@media (min-width: 640px) {
-  .container {
-    max-width: 640px;
-    padding: 0 var(--space-6);
-  }
-}
-
-@media (min-width: 768px) {
-  .container {
-    max-width: 768px;
-    padding: 0 var(--space-8);
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1024px;
-    padding: 0 var(--space-10);
-  }
-}
-
-@media (min-width: 1280px) {
-  .container {
-    max-width: 1280px;
-    padding: 0 var(--space-12);
-  }
-}
-
-@media (min-width: 1536px) {
-  .container {
-    max-width: 1536px;
-    padding: 0 var(--space-16);
-  }
-}
-
-/* ==== GRID E FLEX ==== */
-.grid {
-  display: grid;
-  gap: var(--space-6);
-}
-
-.grid-cols-1 {
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 640px) {
-  .grid-cols-2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 768px) {
-  .grid-cols-3 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid-cols-4 {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.flex {
-  display: flex;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.flex-between {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* ==== BOTÕES BASE ==== */
-button {
-  cursor: pointer;
-  transition: all var(--transition-base);
-  border-radius: var(--radius-lg);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-base);
-  padding: var(--space-3) var(--space-6);
-}
-
-.btn-primary {
-  background: var(--gradient-green-blue);
-  color: var(--color-black);
-  padding: var(--space-4) var(--space-8);
-  box-shadow: var(--shadow-neon-green);
-}
-
-.btn-primary:hover {
-  box-shadow: var(--shadow-neon-blue);
-  transform: translateY(-2px);
-}
-
-.btn-secondary {
-  border: 2px solid var(--color-neon-blue);
-  color: var(--color-neon-blue);
-  padding: var(--space-3) var(--space-6);
-  background: transparent;
-}
-
-.btn-secondary:hover {
-  background: var(--color-blue-transparent);
-  box-shadow: var(--shadow-neon-blue);
-}
-
-/* ==== INPUTS ==== */
-input,
-textarea {
-  width: 100%;
-  padding: var(--space-3) var(--space-4);
-  border: 2px solid var(--color-dark-tertiary);
-  border-radius: var(--radius-lg);
-  background: var(--color-dark-bg);
   color: var(--color-white);
   font-family: var(--font-primary);
-  transition: all var(--transition-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  overflow-x: hidden;
+  /* Evita reflow horizontal enquanto o Lenis interpola o scroll. */
+  width: 100%;
 }
 
-input:focus,
-textarea:focus {
-  border-color: var(--color-neon-green);
-  box-shadow: 0 0 0 3px var(--color-green-transparent);
+/* Textura de ruído sutil sobre o fundo: tira o "preto plástico". */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: var(--color-gray);
+/* Trava o scroll sem "pular" a página (o Lenis não usa overflow). */
+body.is-scroll-locked,
+body.is-menu-open {
+  overflow: hidden;
 }
 
-/* ==== SCROLL ==== */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-dark-bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-neon-green);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-neon-blue);
-}
-
-/* ==== SELEÇÃO DE TEXTO ==== */
 ::selection {
   background: var(--color-neon-green);
   color: var(--color-black);
 }
 
-::-moz-selection {
-  background: var(--color-neon-green);
-  color: var(--color-black);
+/* ==================== TIPOGRAFIA ==================== */
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-secondary);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
 }
 
-/* ==== ACESSIBILIDADE ==== */
+p {
+  color: var(--color-gray);
+}
+
+/* ==================== ACESSIBILIDADE ==================== */
+
+:focus-visible {
+  outline: 2px solid var(--color-neon-green);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: var(--z-notification);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-neon-green);
+  color: var(--color-black);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
+  transform: translateY(-200%);
+  transition: transform var(--transition-base);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Elementos que só existem para leitores de tela. */
 .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
-  padding: 0;
-  margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap;
-  border-width: 0;
 }
 
-/* ==== FOCUS VISIBLE ==== */
-*:focus-visible {
-  outline: 2px solid var(--color-neon-green);
-  outline-offset: 2px;
+/* ==================== LAYOUT ==================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
 }
 
-/* ==== UTILITÁRIOS ==== */
-.text-center {
-  text-align: center;
+.section {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--section-pad-y);
 }
 
-.text-left {
-  text-align: left;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.mb-4 {
+.section-title {
+  font-size: var(--font-size-section);
   margin-bottom: var(--space-4);
 }
 
-.mt-4 {
-  margin-top: var(--space-4);
+.section-title span {
+  background: var(--gradient-green-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
+.section-lead {
+  max-width: 52ch;
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-12);
 }
 
-.hidden {
-  display: none !important;
+.section-title + .about-container,
+.section-title + .timeline-container,
+.section-title + .formations-grid,
+.section-title + .technologies-container,
+.section-title + .platforms-grid,
+.section-title + .contact-container {
+  margin-top: var(--space-14);
 }
 
-.visible {
-  display: block !important;
+/* ==================== BOTÕES ==================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color var(--transition-base), border-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn > span {
+  position: relative;
+  z-index: 2;
+}
+
+.btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-primary {
+  background: var(--gradient-green-blue);
+  color: var(--color-black);
+  box-shadow: 0 0 0 rgba(0, 255, 136, 0);
+}
+
+/* Brilho que cresce do centro no hover — sem trocar o background,
+   para não perder o gradiente. */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--gradient-blue-purple);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.btn-primary:hover::after {
+  opacity: 1;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 32px rgba(0, 255, 136, 0.28);
+}
+
+.btn-ghost {
+  color: var(--color-white);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-1);
+  backdrop-filter: blur(8px);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-neon-green);
+  color: var(--color-neon-green);
+  box-shadow: var(--shadow-neon-green);
+}
+
+/* ==================== BADGE ==================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: var(--space-1) var(--space-4);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  color: var(--color-gray);
+}
+
+.badge-done {
+  border-color: rgba(0, 255, 136, 0.35);
+  background: var(--color-green-transparent);
+  color: var(--color-neon-green);
+}
+
+.badge-progress {
+  border-color: rgba(0, 191, 255, 0.35);
+  background: var(--color-blue-transparent);
+  color: var(--color-neon-blue);
+}
+
+/* ==================== MÍDIA COM FALLBACK ==================== */
+
+.media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--media-ratio, 4 / 3);
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--color-dark-secondary), var(--color-dark-bg));
+  isolation: isolate;
+}
+
+/* Rótulo visível só enquanto a imagem real não existe. */
+.media-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  text-align: center;
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+  background: radial-gradient(circle at 30% 20%, var(--color-green-transparent), transparent 60%),
+    radial-gradient(circle at 80% 80%, var(--color-purple-transparent), transparent 60%);
+}
+
+.media-img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slower) var(--ease-out-expo);
+}
+
+/* Imagem ausente: o JS remove o <img> e marca o container. */
+.media.is-missing .media-fallback {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ==================== CARDS DE VIDRO ==================== */
+
+.card-surface {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(12px);
+  transition: border-color var(--transition-base), background var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.card-surface:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+}
+
+/* ==================== MOVIMENTO REDUZIDO ==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Nada deve ficar invisível esperando uma animação que não vai rodar. */
+  [data-reveal],
+  [data-split] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

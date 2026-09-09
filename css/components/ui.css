@@ -1,0 +1,157 @@
+/*
+  ==========================================
+  UI.CSS
+  ==========================================
+  Componentes transversais: preloader, cursor
+  customizado e reflexo dos cards com tilt.
+  ==========================================
+*/
+
+/* ==================== PRELOADER ==================== */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-notification);
+  display: grid;
+  place-items: center;
+  background: var(--color-black);
+  /* O JS anima este clip-path para revelar a página. */
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+.preloader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.preloader-name {
+  font-family: var(--font-secondary);
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: var(--font-weight-extrabold);
+  letter-spacing: var(--letter-spacing-tight);
+  background: var(--gradient-green-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.preloader-label {
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+.preloader-track {
+  width: min(280px, 60vw);
+  height: 2px;
+  background: var(--border-subtle);
+  overflow: hidden;
+}
+
+.preloader-bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-green-blue);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.preloader-counter {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neon-green);
+}
+
+/* ==================== CURSOR CUSTOMIZADO ==================== */
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+  border-radius: 50%;
+  /* translate(-50%,-50%) fica no `left/top` para o GSAP poder
+     usar x/y sem brigar com o centramento. */
+  margin-left: -4px;
+  margin-top: -4px;
+  opacity: 0;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-neon-green);
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin-left: -17px;
+  margin-top: -17px;
+  border: 1px solid rgba(0, 255, 136, 0.5);
+}
+
+/* Só aparece quando o JS confirma que há mouse de verdade. */
+body.has-custom-cursor .cursor-dot,
+body.has-custom-cursor .cursor-ring {
+  opacity: 1;
+}
+
+body.has-custom-cursor,
+body.has-custom-cursor a,
+body.has-custom-cursor button {
+  cursor: none;
+}
+
+/* Sem mouse (touch) ou com movimento reduzido, o cursor nativo volta. */
+@media (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+/* ==================== REFLEXO DOS CARDS COM TILT ==================== */
+
+[data-tilt] {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Brilho que segue o cursor; --glare-x/y vêm do JS. */
+[data-tilt]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--glare-x, 50%) var(--glare-y, 50%),
+    rgba(255, 255, 255, 0.14),
+    transparent 55%
+  );
+  transition: opacity var(--transition-base);
+}
+
+[data-tilt]:hover::after {
+  opacity: 1;
+}
+
+@media (pointer: coarse) {
+  [data-tilt]::after {
+    display: none;
+  }
+}

@@ -18,3 +18,7 @@ build/
 # Sistema operacional
 .DS_Store
 Thumbs.db
+# Vite
+dist/
+.env
+*.local

@@ -1,296 +1,251 @@
-/* 
+/*
   ==========================================
   PROJETOS.CSS
   ==========================================
-  Estilos da seção "Projetos".
-  Carrossel horizontal com projetos.
-  Preparado para transições suaves e scroll horizontal.
+  Trilho horizontal arrastado pelo scroll (GSAP pin)
+  em telas largas; swipe nativo com snap em telas
+  pequenas — a classe .is-native-scroll faz a troca.
   ==========================================
 */
 
-/* ==== PROJETOS SECTION ==== */
-#projects {
-  background: linear-gradient(180deg, var(--color-black) 0%, rgba(0, 255, 136, 0.05) 100%);
-  padding: var(--space-20) var(--space-4);
+.section-projects {
+  /* A seção é fixada pelo ScrollTrigger: overflow visível
+     evita que o pin crie barra horizontal. */
+  overflow: hidden;
 }
 
-@media (min-width: 768px) {
-  #projects {
-    padding: var(--space-28) var(--space-8);
-  }
+.projects-header {
+  margin-bottom: var(--space-12);
 }
 
-/* ==== PROJECTS CONTAINER ==== */
-.projects-container {
-  max-width: 100%;
-  margin: 0 auto;
+/* ==================== TRILHO ==================== */
+
+.projects-viewport {
+  width: 100%;
 }
 
-/* ==== PROJECTS WRAPPER (para carrossel) ==== */
-.projects-wrapper {
-  position: relative;
-  margin-top: var(--space-12);
+.projects-track {
+  display: flex;
+  gap: var(--space-6);
+  /* Alinha o primeiro card com o container das outras seções. */
+  padding-inline: max(var(--container-pad), calc((100vw - var(--container-max)) / 2));
+  will-change: transform;
 }
 
-/* ==== PROJECTS CAROUSEL ==== */
-.projects-carousel {
-  display: grid;
-  grid-template-columns: repeat(auto-scroll, minmax(300px, 1fr));
-  gap: var(--space-8);
+/* Fallback mobile: swipe nativo com encaixe. */
+.projects-track.is-native-scroll {
   overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: var(--space-4) 0;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-neon-green) var(--color-dark-bg);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: var(--space-4);
 }
 
-@media (min-width: 768px) {
-  .projects-carousel {
-    grid-template-columns: repeat(auto-scroll, minmax(350px, 1fr));
-    gap: var(--space-10);
-    padding: var(--space-4) var(--space-4);
-  }
+.projects-track.is-native-scroll::-webkit-scrollbar {
+  display: none;
 }
 
-@media (min-width: 1024px) {
-  .projects-carousel {
-    grid-template-columns: repeat(auto-scroll, minmax(400px, 1fr));
-    gap: var(--space-12);
-  }
+.projects-track.is-native-scroll .project-card {
+  scroll-snap-align: center;
 }
 
-.projects-carousel::-webkit-scrollbar {
-  height: 6px;
-}
+/* ==================== CARD ==================== */
 
-.projects-carousel::-webkit-scrollbar-track {
-  background: var(--color-dark-bg);
-}
-
-.projects-carousel::-webkit-scrollbar-thumb {
-  background: var(--color-neon-green);
-  border-radius: 3px;
-}
-
-.projects-carousel::-webkit-scrollbar-thumb:hover {
-  background: var(--color-neon-blue);
-}
-
-/* ==== PROJECT CARD ==== */
 .project-card {
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  width: min(560px, 82vw);
   display: flex;
   flex-direction: column;
-  border: 2px solid var(--color-white-transparent);
-  border-radius: var(--radius-2xl);
   overflow: hidden;
-  background: var(--color-dark-secondary);
-  transition: all var(--transition-base);
-  animation: slideInUp 0.6s ease-out;
-  min-width: 300px;
-  height: fit-content;
-  cursor: pointer;
-}
-
-@media (min-width: 768px) {
-  .project-card {
-    min-width: 350px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .project-card {
-    min-width: 400px;
-  }
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  backdrop-filter: blur(12px);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .project-card:hover {
-  border-color: var(--color-neon-green);
-  background: var(--color-green-transparent);
-  box-shadow: var(--shadow-neon-green);
-  transform: translateY(-8px);
+  border-color: var(--border-strong);
+  box-shadow: 0 30px 60px -30px rgba(0, 191, 255, 0.55);
 }
 
-/* ==== PROJECT IMAGE ==== */
-.project-image {
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: linear-gradient(135deg, var(--color-blue-transparent) 0%, var(--color-green-transparent) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+/* ==================== MÍDIA ==================== */
+
+.project-media {
   position: relative;
 }
 
-.project-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--transition-base);
+.project-media .media {
+  border-radius: 0;
 }
 
-.project-card:hover .project-image img {
-  transform: scale(1.1);
+.project-card:hover .media-img {
+  transform: scale(1.04);
 }
 
-/* Placeholder quando não há imagem */
-.project-image-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-gray);
-  font-size: var(--font-size-sm);
+.project-number {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  z-index: 3;
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: rgba(255, 255, 255, 0.25);
+  /* Contorno para o número sobreviver sobre imagens claras. */
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.35);
 }
 
-/* ==== PROJECT CONTENT ==== */
+/* ==================== CONTEÚDO ==================== */
+
 .project-content {
-  padding: var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  flex-grow: 1;
-}
-
-.project-name {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-neon-green);
-  margin: 0;
+  gap: var(--space-4);
+  padding: var(--space-8);
+  flex: 1;
 }
 
 .project-category {
+  align-self: flex-start;
+  padding: var(--space-1) var(--space-4);
   font-size: var(--font-size-xs);
-  color: var(--color-neon-blue);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wider);
-  margin: 0;
+  color: var(--color-neon-green);
+  background: var(--color-green-transparent);
+  border: 1px solid rgba(0, 255, 136, 0.28);
+  border-radius: var(--radius-full);
+}
+
+.project-name {
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
 }
 
 .project-description {
   font-size: var(--font-size-sm);
-  color: var(--color-gray);
   line-height: var(--line-height-relaxed);
-  margin: 0;
-  flex-grow: 1;
 }
 
-/* ==== PROJECT TAGS ==== */
+/* ==================== MÉTRICAS ==================== */
+
+.project-metrics {
+  display: flex;
+  gap: var(--space-8);
+  padding-block: var(--space-4);
+  border-block: 1px solid var(--border-subtle);
+}
+
+.project-metric-value {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  background: var(--gradient-green-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.project-metric-label {
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+/* ==================== TAGS ==================== */
+
 .project-tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin-top: var(--space-3);
 }
 
 .project-tag {
-  display: inline-block;
-  background: var(--color-green-transparent);
-  border: 1px solid var(--color-neon-green);
-  border-radius: var(--radius-full);
   padding: var(--space-1) var(--space-3);
   font-size: var(--font-size-xs);
-  color: var(--color-neon-green);
+  color: var(--color-gray);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
 }
 
-/* ==== PROJECT LINK ==== */
+/* ==================== LINKS ==================== */
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
 .project-link {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--color-neon-green);
-  font-weight: var(--font-weight-semibold);
-  text-decoration: none;
-  margin-top: var(--space-4);
-  transition: all var(--transition-base);
+  padding: var(--space-3) var(--space-6);
   font-size: var(--font-size-sm);
-}
-
-.project-link::after {
-  content: '→';
-  transition: transform var(--transition-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-black);
+  background: var(--gradient-green-blue);
+  border-radius: var(--radius-full);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
 }
 
 .project-link:hover {
-  color: var(--color-neon-blue);
+  box-shadow: 0 10px 28px -12px rgba(0, 255, 136, 0.7);
 }
 
-.project-link:hover::after {
-  transform: translateX(4px);
-}
-
-/* ==== CAROUSEL CONTROLS ==== */
-.carousel-controls {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-4);
-  margin-top: var(--space-8);
-}
-
-.carousel-btn {
-  width: 40px;
-  height: 40px;
-  border: 2px solid var(--color-neon-green);
-  border-radius: var(--radius-lg);
+.project-link-ghost {
+  color: var(--color-white);
   background: transparent;
+  border: 1px solid var(--border-strong);
+}
+
+.project-link-ghost:hover {
+  border-color: var(--color-neon-green);
   color: var(--color-neon-green);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-base);
-  font-size: var(--font-size-lg);
+  box-shadow: none;
 }
 
-.carousel-btn:hover {
-  background: var(--color-green-transparent);
-  box-shadow: var(--shadow-neon-green);
+.project-link svg {
+  width: 16px;
+  height: 16px;
 }
 
-.carousel-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* Estado honesto enquanto não há link publicado. */
+.project-links-empty {
+  margin-top: auto;
+  padding-top: var(--space-2);
+  font-size: var(--font-size-xs);
+  font-style: italic;
+  color: rgba(160, 160, 160, 0.7);
 }
 
-/* ==== DELAYS ==== */
-.project-card:nth-child(1) {
-  animation-delay: 0.1s;
+/* ==================== PROGRESSO ==================== */
+
+.projects-progress {
+  width: min(var(--container-max), calc(100% - var(--container-pad) * 2));
+  height: 2px;
+  margin: var(--space-12) auto 0;
+  background: var(--border-subtle);
+  border-radius: var(--radius-full);
+  overflow: hidden;
 }
 
-.project-card:nth-child(2) {
-  animation-delay: 0.2s;
+.projects-progress-bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-green-blue);
+  transform: scaleX(0);
+  transform-origin: left center;
 }
 
-.project-card:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.project-card:nth-child(n+4) {
-  animation-delay: 0.4s;
-}
-
-/* ==== RESPONSIVIDADE ==== */
-@media (max-width: 767px) {
-  #projects {
-    padding: var(--space-16) var(--space-4);
-  }
-
-  .project-card {
-    min-width: 280px;
-    animation-delay: 0 !important;
-  }
-
-  .project-image {
-    aspect-ratio: 4/3;
-  }
-
-  .project-name {
-    font-size: var(--font-size-base);
-  }
-
-  .project-description {
-    font-size: var(--font-size-xs);
+@media (max-width: 1023px) {
+  /* Sem pin: a barra de progresso não teria o que reportar. */
+  .projects-progress {
+    display: none;
   }
 }

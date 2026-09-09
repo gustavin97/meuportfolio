@@ -126,6 +126,28 @@
   --z-tooltip: 70;
   --z-notification: 80;
 
+
+  /* ==== LAYOUT ==== */
+  --container-max: 1280px;
+  --container-pad: var(--space-6);
+  --header-height: 76px;
+  --section-pad-y: clamp(5rem, 10vw, 9rem);
+
+  /* ==== TIPOGRAFIA FLUIDA ==== */
+  --font-size-display: clamp(3rem, 11vw, 9rem);
+  --font-size-section: clamp(2rem, 5vw, 3.5rem);
+  --font-size-card-title: clamp(1.125rem, 2vw, 1.375rem);
+
+  /* ==== SUPERFÍCIES DE VIDRO ==== */
+  --surface-1: rgba(255, 255, 255, 0.035);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* ==== EASINGS ==== */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
   /* ==== BREAKPOINTS ==== */
   --breakpoint-xs: 320px;
   --breakpoint-sm: 640px;
@@ -134,12 +156,4 @@
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
   --breakpoint-ultra: 1920px;
-}
-
-/* Dark mode support (futuro) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-white: #FFFFFF;
-    --color-black: #050505;
-  }
 }
