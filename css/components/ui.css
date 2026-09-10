@@ -69,54 +69,41 @@
   color: var(--color-neon-green);
 }
 
-/* ==================== CURSOR CUSTOMIZADO ==================== */
+/* ==================== CURSOR ANIMADO ==================== */
 
-.cursor-dot,
-.cursor-ring {
+/*
+  Canvas em tela cheia onde o cursor é desenhado (src/components/cursor.js).
+  Fica acima de tudo, mas nunca intercepta ponteiro.
+*/
+.cursor-canvas {
   position: fixed;
   top: 0;
   left: 0;
   z-index: var(--z-tooltip);
   pointer-events: none;
-  border-radius: 50%;
-  /* translate(-50%,-50%) fica no `left/top` para o GSAP poder
-     usar x/y sem brigar com o centramento. */
-  margin-left: -4px;
-  margin-top: -4px;
-  opacity: 0;
-  will-change: transform;
+  /* Mantém o brilho vivo sobre o fundo escuro sem lavar as cores. */
+  mix-blend-mode: screen;
 }
 
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--color-neon-green);
-}
-
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  margin-left: -17px;
-  margin-top: -17px;
-  border: 1px solid rgba(0, 255, 136, 0.5);
-}
-
-/* Só aparece quando o JS confirma que há mouse de verdade. */
-body.has-custom-cursor .cursor-dot,
-body.has-custom-cursor .cursor-ring {
-  opacity: 1;
-}
-
+/* O cursor nativo só some depois que o JS confirma que há mouse. */
 body.has-custom-cursor,
 body.has-custom-cursor a,
-body.has-custom-cursor button {
+body.has-custom-cursor button,
+body.has-custom-cursor [data-cursor='hover'] {
   cursor: none;
 }
 
-/* Sem mouse (touch) ou com movimento reduzido, o cursor nativo volta. */
+/* Campos de texto mantêm o cursor nativo: o I-beam informa onde
+   o texto vai ser inserido, e a bola não substitui isso. */
+body.has-custom-cursor input,
+body.has-custom-cursor textarea,
+body.has-custom-cursor select {
+  cursor: auto;
+}
+
+/* Sem mouse, o canvas nem é criado — mas garante em CSS também. */
 @media (pointer: coarse) {
-  .cursor-dot,
-  .cursor-ring {
+  .cursor-canvas {
     display: none;
   }
 }

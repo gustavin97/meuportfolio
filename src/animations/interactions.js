@@ -11,53 +11,6 @@
 import { env } from '../core/env.js';
 import { gsap } from '../core/scroll.js';
 
-/**
- * Cursor de dois anéis: o ponto acompanha o mouse na hora,
- * o anel segue com atraso — a defasagem é o efeito.
- */
-export function initCustomCursor() {
-  if (env.isTouch || env.prefersReducedMotion) return;
-
-  const dot = document.querySelector('.cursor-dot');
-  const ring = document.querySelector('.cursor-ring');
-  if (!dot || !ring) return;
-
-  document.body.classList.add('has-custom-cursor');
-
-  const setDotX = gsap.quickSetter(dot, 'x', 'px');
-  const setDotY = gsap.quickSetter(dot, 'y', 'px');
-  const setRingX = gsap.quickTo(ring, 'x', { duration: 0.5, ease: 'power3.out' });
-  const setRingY = gsap.quickTo(ring, 'y', { duration: 0.5, ease: 'power3.out' });
-
-  window.addEventListener(
-    'pointermove',
-    (event) => {
-      setDotX(event.clientX);
-      setDotY(event.clientY);
-      setRingX(event.clientX);
-      setRingY(event.clientY);
-    },
-    { passive: true },
-  );
-
-  // Cresce sobre qualquer elemento interativo.
-  const interactive = 'a, button, [data-cursor="hover"], input, textarea';
-  document.addEventListener('pointerover', (event) => {
-    if (event.target.closest(interactive)) {
-      gsap.to(ring, { scale: 2.2, opacity: 0.5, duration: 0.3, ease: 'power2.out' });
-    }
-  });
-  document.addEventListener('pointerout', (event) => {
-    if (event.target.closest(interactive)) {
-      gsap.to(ring, { scale: 1, opacity: 1, duration: 0.3, ease: 'power2.out' });
-    }
-  });
-
-  // Some ao sair da janela para não ficar um ponto preso na borda.
-  document.addEventListener('pointerleave', () => gsap.to([dot, ring], { opacity: 0, duration: 0.2 }));
-  document.addEventListener('pointerenter', () => gsap.to([dot, ring], { opacity: 1, duration: 0.2 }));
-}
-
 /** Botões que "puxam" o cursor dentro de um raio. */
 export function initMagneticButtons(scope = document) {
   if (env.isTouch || env.prefersReducedMotion) return;
@@ -116,7 +69,6 @@ export function initTiltCards(scope = document) {
 }
 
 export function initInteractions(scope = document) {
-  initCustomCursor();
   initMagneticButtons(scope);
   initTiltCards(scope);
 }

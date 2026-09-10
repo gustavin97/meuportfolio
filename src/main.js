@@ -35,6 +35,7 @@ import { renderAll } from './sections/render.js';
 import { initIcons } from './components/icons.js';
 import { initHeader } from './components/header.js';
 import { initContactForm } from './components/form.js';
+import { initAnimatedCursor } from './components/cursor.js';
 import { playHeroIntro, runPreloader } from './components/preloader.js';
 import { initAllReveals } from './animations/reveal.js';
 import { initScrollScenes } from './animations/scroll-scenes.js';
@@ -89,6 +90,7 @@ async function init() {
   // 3. Componentes e animações.
   initHeader();
   initContactForm();
+  initAnimatedCursor();
   initAllReveals();
   initInteractions();
 

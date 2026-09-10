@@ -33,7 +33,7 @@ export const profile = {
 
 /* ==== REDES SOCIAIS ==== */
 export const socials = [
-  { id: 'github', label: 'GitHub', icon: 'github', url: 'https://github.com/SEU_USUARIO' },
+  { id: 'github', label: 'GitHub', icon: 'github', url: 'https://github.com/gustavin97' },
   { id: 'linkedin', label: 'LinkedIn', icon: 'linkedin', url: 'https://linkedin.com/in/SEU_USUARIO' },
   { id: 'instagram', label: 'Instagram', icon: 'instagram', url: 'https://instagram.com/SEU_USUARIO' },
 ];
