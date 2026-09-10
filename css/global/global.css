@@ -343,7 +343,8 @@ p {
   -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
 }
 
-.section-bg img {
+.section-bg img,
+.bg-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
