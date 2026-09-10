@@ -12,12 +12,10 @@
  */
 
 import Lenis from 'lenis';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { env } from './env.js';
-
-gsap.registerPlugin(ScrollTrigger);
+// O registro dos plugins acontece em core/gsap.js.
+import { gsap, ScrollTrigger } from './gsap.js';
 
 let lenis = null;
 

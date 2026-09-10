@@ -11,7 +11,8 @@
  */
 
 import { env } from '../core/env.js';
-import { gsap, startScroll, stopScroll } from '../core/scroll.js';
+import { gsap } from '../core/gsap.js';
+import { startScroll, stopScroll } from '../core/scroll.js';
 
 /** Espera fontes e a janela `load`, com teto de tempo para não travar em rede ruim. */
 function waitForAssets(timeout = 4000) {

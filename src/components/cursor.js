@@ -18,7 +18,7 @@
  */
 
 import { env } from '../core/env.js';
-import { gsap } from '../core/scroll.js';
+import { gsap } from '../core/gsap.js';
 
 const TAU = Math.PI * 2;
 

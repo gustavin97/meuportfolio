@@ -12,7 +12,7 @@
  */
 
 import { profile } from '../data/site.js';
-import { gsap } from '../core/scroll.js';
+import { gsap } from '../core/gsap.js';
 import { env } from '../core/env.js';
 
 const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || '';

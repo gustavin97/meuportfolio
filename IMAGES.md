@@ -8,7 +8,7 @@ Os caminhos vêm de `src/data/site.js` — se quiser outro nome, mude lá.
 
 ---
 
-## 1. Projetos — `assets/images/projects/`
+## 1. Projetos — `public/assets/images/projects/`
 
 Formato: **1600×1000 px** (16:10), JPG, o mais importante da tela no terço superior.
 
@@ -19,7 +19,7 @@ Formato: **1600×1000 px** (16:10), JPG, o mais importante da tela no terço sup
 | `landing-conversao.jpg` | Landing Page de Conversão | Landing page longa vista em perspectiva, hero + formulário, fundo escuro |
 | `automacao-n8n.jpg` | Sistema de Automação | Diagrama de fluxo de nós conectados estilo n8n, fundo escuro, linhas neon |
 
-## 2. Galeria (seção Sobre) — `assets/images/gallery/`
+## 2. Galeria (seção Sobre) — `public/assets/images/gallery/`
 
 | Arquivo | Proporção | Conteúdo |
 |---|---|---|
@@ -29,7 +29,7 @@ Formato: **1600×1000 px** (16:10), JPG, o mais importante da tela no terço sup
 
 > `perfil.jpg` também é usada no `schema.org` do `index.html`.
 
-## 3. Formações — `assets/images/formations/`
+## 3. Formações — `public/assets/images/formations/`
 
 Formato: **1200×750 px** (16:10), JPG. Podem ser abstratas/temáticas.
 
@@ -40,7 +40,7 @@ Formato: **1200×750 px** (16:10), JPG. Podem ser abstratas/temáticas.
 | `frontend.jpg` | Programação Front-End (DIO) |
 | `automacao.jpg` | Automação com n8n (Hashtag) |
 
-## 4. Plataformas — `assets/images/platforms/`
+## 4. Plataformas — `public/assets/images/platforms/`
 
 Formato: **SVG** (ou PNG 256×256 com fundo transparente). São logos oficiais —
 **baixe do site da marca, não gere por IA**. Marca inventada desqualifica o portfólio.
@@ -49,7 +49,7 @@ Formato: **SVG** (ou PNG 256×256 com fundo transparente). São logos oficiais �
 
 > Renderizados com `object-fit: contain`, então logo horizontal também funciona.
 
-## 5. Open Graph — `assets/images/og/`
+## 5. Open Graph — `public/assets/images/og/`
 
 | Arquivo | Formato | Conteúdo |
 |---|---|---|

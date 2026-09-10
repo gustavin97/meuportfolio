@@ -88,7 +88,7 @@ export function renderHero() {
 
       <h1 class="hero-title">
         <span class="hero-title-primary" data-split="chars">${profile.name}</span>
-        <span class="hero-title-secondary" data-reveal="up" data-reveal-delay="0.35">${profile.role}</span>
+        <span class="hero-title-secondary" data-scramble data-reveal="up" data-reveal-delay="0.35">${profile.role}</span>
       </h1>
 
       <p class="hero-subtitle" data-reveal="up" data-reveal-delay="0.45">${profile.tagline}</p>
@@ -156,7 +156,15 @@ export function renderAbout() {
             .map(
               (item) => html`
                 <figure class="gallery-item">
-                  ${raw(media({ src: item.image, alt: item.alt, fallback: item.label, ratio: '3/4' }))}
+                  ${raw(
+                    media({
+                      src: item.image,
+                      alt: item.alt,
+                      fallback: item.label,
+                      ratio: '3/4',
+                      className: 'media--parallax',
+                    }),
+                  )}
                 </figure>
               `,
             )
@@ -210,6 +218,7 @@ export function renderFormations() {
             (item, i) => html`
               <article
                 class="formation-card"
+                data-skew
                 data-reveal="up"
                 data-reveal-delay="${raw(String(i * 0.08))}"
                 data-tilt="6"
@@ -281,6 +290,7 @@ export function renderPlatforms() {
             (item, i) => html`
               <article
                 class="platform-card"
+                data-skew
                 data-reveal="up"
                 data-reveal-delay="${raw(String(i * 0.07))}"
                 data-tilt="7"
@@ -322,10 +332,29 @@ function projectCard(project, index) {
   }
 
   return html`
-    <article class="project-card" data-index="${raw(String(index + 1))}" data-tilt="5">
+    <article
+      class="project-card"
+      data-index="${raw(String(index + 1))}"
+      data-project-id="${project.id}"
+      data-tilt="5"
+      data-skew
+    >
       <div class="project-media">
-        ${raw(media({ src: project.image, alt: project.name, fallback: project.name, ratio: '16/10' }))}
+        ${raw(
+          media({
+            src: project.image,
+            alt: project.name,
+            fallback: project.name,
+            ratio: '16/10',
+            className: 'media--parallax',
+          }),
+        )}
         <span class="project-number" aria-hidden="true">0${raw(String(index + 1))}</span>
+        <!-- Botão de verdade (não o card inteiro clicável): mantém
+             o card navegável por teclado e anunciável por leitor de tela. -->
+        <button class="project-open" aria-label="Abrir estudo de caso: ${project.name}">
+          <span class="project-open-label" aria-hidden="true">Ver estudo de caso</span>
+        </button>
       </div>
 
       <div class="project-content">

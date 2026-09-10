@@ -35,7 +35,7 @@ busy background, stock photo look, distorted hands, extra fingers
 
 ---
 
-## 1. Projetos — `assets/images/projects/`
+## 1. Projetos — `public/assets/images/projects/`
 
 **Formato: 1600 × 1000 px (16:10), JPG.** O elemento principal no terço superior —
 o card corta a base da imagem em telas pequenas.
@@ -77,7 +77,7 @@ elegant, like a high-end node editor.
 
 ---
 
-## 2. Galeria (seção Sobre) — `assets/images/gallery/`
+## 2. Galeria (seção Sobre) — `public/assets/images/gallery/`
 
 ### `workspace.jpg` — **1600 × 1000 px (16:10)**
 ```
@@ -101,7 +101,7 @@ is abstract and unreadable. Macro lens feel, visible screen grain.
 
 ---
 
-## 3. Formações — `assets/images/formations/`
+## 3. Formações — `public/assets/images/formations/`
 
 **Formato: 1200 × 750 px (16:10), JPG.** São imagens temáticas, não fotos de diploma.
 
@@ -139,7 +139,7 @@ processes. Technical, minimal, no clutter.
 
 ---
 
-## 4. Open Graph — `assets/images/og/og-image.jpg`
+## 4. Open Graph — `public/assets/images/og/og-image.jpg`
 
 **1200 × 630 px exatos.** É a miniatura que aparece ao compartilhar o link no
 WhatsApp e LinkedIn — **esta é a única que leva texto**, e ele precisa ser grande.
@@ -159,15 +159,15 @@ contrast, text must be large and perfectly legible at thumbnail size.
 
 ---
 
-## 5. Ícone — `assets/icons/apple-touch-icon.png`
+## 5. Ícone — `public/assets/icons/apple-touch-icon.png`
 
 **Não precisa de IA.** É só exportar o favicon que já existe:
 
 ```bash
-npx sharp-cli -i assets/icons/favicon.svg -o assets/icons/apple-touch-icon.png resize 180 180
+npx sharp-cli -i public/assets/icons/favicon.svg -o public/assets/icons/apple-touch-icon.png resize 180 180
 ```
 
-Ou abra `assets/icons/favicon.svg` no navegador, dê print e redimensione para 180×180.
+Ou abra `public/assets/icons/favicon.svg` no navegador, dê print e redimensione para 180×180.
 
 ---
 
@@ -175,8 +175,8 @@ Ou abra `assets/icons/favicon.svg` no navegador, dê print e redimensione para 1
 
 | Arquivo | Por quê | O que fazer |
 |---|---|---|
-| `assets/images/platforms/*.svg` | São marcas registradas. Logo de WordPress ou Shopify "quase igual" passa impressão de fraude. | Baixe os oficiais em [worldvectorlogo.com](https://worldvectorlogo.com) ou na página de imprensa de cada empresa. |
-| `assets/images/gallery/perfil.jpg` | É **você**. Recrutador quer ver a pessoa que vai contratar. | Foto real, boa luz, fundo simples. Não precisa ser estúdio — celular na janela resolve. |
+| `public/assets/images/platforms/*.svg` | São marcas registradas. Logo de WordPress ou Shopify "quase igual" passa impressão de fraude. | Baixe os oficiais em [worldvectorlogo.com](https://worldvectorlogo.com) ou na página de imprensa de cada empresa. |
+| `public/assets/images/gallery/perfil.jpg` | É **você**. Recrutador quer ver a pessoa que vai contratar. | Foto real, boa luz, fundo simples. Não precisa ser estúdio — celular na janela resolve. |
 
 ---
 

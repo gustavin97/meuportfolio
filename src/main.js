@@ -27,6 +27,7 @@ import '../css/sections/plataformas.css';
 import '../css/sections/projetos.css';
 import '../css/sections/contato.css';
 import '../css/components/ui.css';
+import '../css/components/lightbox.css';
 
 /* ==== MÓDULOS ==== */
 import { env, onMotionPreferenceChange, shouldRenderImmersive } from './core/env.js';
@@ -36,10 +37,12 @@ import { initIcons } from './components/icons.js';
 import { initHeader } from './components/header.js';
 import { initContactForm } from './components/form.js';
 import { initAnimatedCursor } from './components/cursor.js';
+import { initProjectLightbox } from './components/lightbox.js';
 import { playHeroIntro, runPreloader } from './components/preloader.js';
 import { initAllReveals } from './animations/reveal.js';
 import { initScrollScenes } from './animations/scroll-scenes.js';
 import { initInteractions } from './animations/interactions.js';
+import { initMedia } from './animations/media.js';
 import { initMediaFallbacks } from './utils/dom.js';
 
 /** Cena 3D — só carregada se o dispositivo comportar. */
@@ -93,6 +96,8 @@ async function init() {
   initAnimatedCursor();
   initAllReveals();
   initInteractions();
+  initMedia();
+  initProjectLightbox();
 
   // 4. Cena 3D e as cenas de scroll que dependem dela.
   heroScene = await setupHeroScene();

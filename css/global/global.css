@@ -318,3 +318,67 @@ p {
     transform: none !important;
   }
 }
+
+/* ==================== FUNDO DE SEÇÃO ==================== */
+
+/*
+  Imagem grande atrás do conteúdo, movida por scroll em
+  animations/media.js. Fica bem escurecida: precisa dar
+  profundidade sem disputar leitura com o texto.
+*/
+[data-bg] {
+  position: relative;
+  isolation: isolate;
+}
+
+.section-bg {
+  position: absolute;
+  inset: -12% 0;
+  z-index: -1;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  /* Dissolve nas bordas para não criar faixa reta entre seções. */
+  mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+}
+
+.section-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Dessatura e escurece: a cor vem dos acentos, não da foto. */
+  filter: grayscale(0.45) brightness(0.34) contrast(1.1);
+}
+
+/* Véu que garante contraste do texto mesmo em imagem clara. */
+.section-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(5, 5, 5, 0.55), rgba(5, 5, 5, 0.9));
+}
+
+/* ==================== PARALLAX DENTRO DA MOLDURA ==================== */
+
+/*
+  A imagem é mais alta que a moldura para poder deslizar sem
+  descobrir borda. O -6% de topo centraliza a folga.
+*/
+.media--parallax .media-img {
+  position: absolute;
+  top: -6%;
+  left: 0;
+  height: 112%;
+}
+
+/* ==================== TRAÇO DOS TÍTULOS ==================== */
+
+.title-underline {
+  display: block;
+  width: clamp(140px, 22vw, 260px);
+  height: 12px;
+  margin-bottom: var(--space-8);
+  color: var(--color-neon-green);
+  overflow: visible;
+}

@@ -10,7 +10,8 @@
 
 import { navigation } from '../data/site.js';
 import { env } from '../core/env.js';
-import { gsap, ScrollTrigger, scrollTo, startScroll, stopScroll } from '../core/scroll.js';
+import { gsap, ScrollTrigger } from '../core/gsap.js';
+import { scrollTo, startScroll, stopScroll } from '../core/scroll.js';
 
 /** Compacta o header e o esconde quando o usuário desce. */
 function initHeaderState(header) {

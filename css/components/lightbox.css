@@ -1,0 +1,181 @@
+/*
+  ==========================================
+  LIGHTBOX.CSS
+  ==========================================
+  Overlay do estudo de caso. A .project-media é movida
+  para cá pelo Flip, então ela NÃO pode ter tamanho fixo
+  definido aqui — só o slot que a recebe.
+  ==========================================
+*/
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+}
+
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 5, 5, 0.88);
+  backdrop-filter: blur(14px);
+}
+
+.lightbox-panel {
+  position: relative;
+  z-index: 2;
+  width: min(1100px, 100%);
+  max-height: 90svh;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-10);
+  padding: var(--space-10);
+  background: var(--color-dark-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+}
+
+/* ==================== FECHAR ==================== */
+
+.lightbox-close {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  font-size: var(--font-size-xl);
+  line-height: 1;
+  color: var(--color-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  background: var(--surface-1);
+  transition: border-color var(--transition-base), color var(--transition-base);
+}
+
+.lightbox-close:hover {
+  border-color: var(--color-neon-green);
+  color: var(--color-neon-green);
+}
+
+/* ==================== MÍDIA RECEBIDA DO FLIP ==================== */
+
+.lightbox-media {
+  align-self: start;
+}
+
+/* Dentro do overlay a moldura perde o recorte do card. */
+.lightbox-media .project-media .media {
+  border-radius: var(--radius-xl);
+}
+
+/* O botão de abrir não faz sentido depois de aberto. */
+.lightbox-media .project-open {
+  display: none;
+}
+
+/* ==================== CORPO ==================== */
+
+.lightbox-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.lightbox-category {
+  align-self: flex-start;
+  padding: var(--space-1) var(--space-4);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-neon-green);
+  background: var(--color-green-transparent);
+  border: 1px solid rgba(0, 255, 136, 0.28);
+  border-radius: var(--radius-full);
+}
+
+.lightbox-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+}
+
+.lightbox-case {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.lightbox-case-block h4 {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--color-neon-blue);
+  margin-bottom: var(--space-2);
+}
+
+.lightbox-case-block p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+.lightbox-metrics {
+  display: flex;
+  gap: var(--space-8);
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--border-subtle);
+}
+
+.lightbox-metric dt {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  background: var(--gradient-green-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lightbox-metric dd {
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+.lightbox-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.lightbox-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+/* ==================== RESPONSIVO ==================== */
+
+@media (max-width: 900px) {
+  .lightbox {
+    padding: var(--space-3);
+  }
+
+  .lightbox-panel {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    padding: var(--space-6);
+  }
+}

@@ -9,7 +9,7 @@
  */
 
 import { env } from '../core/env.js';
-import { gsap } from '../core/scroll.js';
+import { gsap } from '../core/gsap.js';
 
 /** Botões que "puxam" o cursor dentro de um raio. */
 export function initMagneticButtons(scope = document) {

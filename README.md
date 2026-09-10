@@ -3,7 +3,7 @@
 Portfólio pessoal com cena WebGL interativa, scroll suave e animações guiadas por scroll.
 JavaScript puro (sem framework de UI), empacotado com Vite.
 
-**Stack:** Vite · Three.js · GSAP + ScrollTrigger · Lenis · SplitType · Lucide
+**Stack:** Vite · Three.js · GSAP (ScrollTrigger, Flip, SplitText, DrawSVG, ScrambleText, CustomEase) · Lenis · Lucide
 
 ---
 
@@ -44,20 +44,23 @@ de e-mail do visitante** — um caminho que funciona, em vez de um sucesso falso
 
 ```
 index.html              Casca semântica das seções
+public/assets/          Imagens, ícones, currículo (copiado literalmente no build)
 src/
   main.js               Ponto de entrada: orquestra a ordem de inicialização
   data/site.js          ← TODO O CONTEÚDO
   core/
     env.js              Detecta WebGL, potência do device, prefers-reduced-motion
+    gsap.js             Registro dos plugins + curvas de easing da casa
     scroll.js           Lenis + ScrollTrigger no mesmo ticker
   three/
     HeroScene.js        Cena 3D do hero
     shaders.js          GLSL (ruído simplex, fresnel, partículas)
   animations/
-    reveal.js           Entradas por [data-reveal] / [data-split] / [data-counter]
-    scroll-scenes.js    Parallax, timeline, projetos horizontais
-    interactions.js     Cursor, botões magnéticos, tilt dos cards
-  components/           header, form, preloader, icons
+    reveal.js           [data-reveal] [data-split] [data-counter] [data-scramble]
+    media.js            Wipe das imagens, parallax, fundos de seção, skew por velocidade
+    scroll-scenes.js    Timeline, projetos horizontais, vínculo com o 3D
+    interactions.js     Botões magnéticos, tilt dos cards
+  components/           header, form, preloader, icons, cursor, lightbox
   sections/render.js    Gera o HTML das seções a partir dos dados
   utils/dom.js          Template com escape + fallback de mídia
 css/                    global/ · layout/ · sections/ · components/
@@ -94,7 +97,9 @@ com o texto original (senão o leitor de tela soletra letra por letra).
 - [ ] Trocar e-mail, telefone e URLs sociais em `src/data/site.js` (marcados com `TODO`)
 - [ ] Substituir os números dos projetos por métricas reais — hoje são exemplos
 - [ ] Preencher `liveUrl` / `repoUrl` dos projetos (sem eles, o card mostra "Estudo de caso em breve")
-- [ ] Gerar as imagens de [`IMAGES.md`](IMAGES.md)
+- [ ] Foto real em `public/assets/images/gallery/perfil.jpg` (ver [`IMAGES.md`](IMAGES.md))
+- [ ] Baixar os 5 logos oficiais em `public/assets/images/platforms/`
+- [ ] Colocar o PDF em `public/assets/curriculo-devguz.pdf`
 - [ ] Configurar `VITE_CONTACT_ENDPOINT`
 - [ ] Trocar `devguz.com` pelo domínio real (`index.html` e `src/data/site.js`)
 

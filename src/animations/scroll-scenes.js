@@ -10,7 +10,7 @@
  */
 
 import { env } from '../core/env.js';
-import { gsap, ScrollTrigger } from '../core/scroll.js';
+import { gsap, ScrollTrigger } from '../core/gsap.js';
 
 /**
  * Liga o progresso do scroll do hero à cena WebGL e
@@ -85,27 +85,8 @@ export function timelineScene() {
   });
 }
 
-/** Parallax suave nas fotos da seção Sobre. */
-export function galleryParallaxScene() {
-  if (env.prefersReducedMotion || env.tier === 'low') return;
-
-  gsap.utils.toArray('.gallery-item').forEach((item, index) => {
-    gsap.fromTo(
-      item,
-      { yPercent: 8 * (index + 1) },
-      {
-        yPercent: -8 * (index + 1),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.about-gallery',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      },
-    );
-  });
-}
+// O parallax das fotos do Sobre virou responsabilidade de
+// animations/media.js, que move a imagem DENTRO da moldura.
 
 /**
  * Projetos em rolagem horizontal com a seção fixada.
@@ -186,7 +167,6 @@ export function techGridScene() {
 export function initScrollScenes(heroScene) {
   heroScrollScene(heroScene);
   timelineScene();
-  galleryParallaxScene();
   projectsHorizontalScene();
   techGridScene();
 
