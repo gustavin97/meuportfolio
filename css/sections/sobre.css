@@ -65,9 +65,9 @@
   --media-ratio: 16 / 10;
 }
 
-.gallery-item:hover .media-img {
-  transform: scale(1.06);
-}
+/* O zoom no hover é feito pelo GSAP (animations/interactions.js):
+   o transform desta imagem é escrito inline pelo reveal e pelo parallax,
+   e estilo inline vence regra CSS — aqui a regra seria ignorada. */
 
 /* ==================== RESPONSIVO ==================== */
 

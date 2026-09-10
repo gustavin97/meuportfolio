@@ -33,6 +33,15 @@ gsap.registerPlugin(
   CustomEase,
 );
 
+/* ==================== CONFIGURAÇÃO ==================== */
+
+/*
+  No mobile, mostrar/esconder a barra de URL muda a altura da viewport e
+  dispara refresh do ScrollTrigger, o que faz as animações pularem no meio
+  do scroll. ignoreMobileResize trata isso como o mesmo viewport.
+*/
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 /* ==================== CURVAS DA CASA ==================== */
 
 /*

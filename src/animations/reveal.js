@@ -58,7 +58,14 @@ export function initReveals(scope = document) {
       duration: DURATION.base,
       delay,
       ease: 'guz',
-      scrollTrigger: { trigger: element, start: 'top 88%', once: true },
+      scrollTrigger: {
+        trigger: element,
+        start: 'top 88%',
+        once: true,
+        // Num scroll muito rápido o elemento passaria voando com a
+        // animação pela metade; isso força o estado final.
+        fastScrollEnd: true,
+      },
     });
   });
 }
@@ -191,7 +198,10 @@ export function initTitleUnderlines(scope = document) {
     svg.innerHTML =
       '<path d="M2 8 C 60 2, 120 11, 180 5 S 260 3, 298 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>';
 
-    title.insertAdjacentElement('afterend', svg);
+    // Vai DENTRO do título, não como irmão: inserir depois quebraria
+    // os seletores `.section-title + .container` que dão o espaçamento
+    // das seções — o SVG passaria a ser o irmão adjacente.
+    title.appendChild(svg);
 
     if (env.prefersReducedMotion) return;
 

@@ -49,7 +49,7 @@ export async function runPreloader({ onProgress } = {}) {
   const progress = { value: 0 };
   const fakeProgress = gsap.to(progress, {
     value: 90,
-    duration: 2.2,
+    duration: 1.5,
     ease: 'power1.out',
     onUpdate: () => {
       const rounded = Math.round(progress.value);

@@ -123,31 +123,23 @@ export function initSectionBackgrounds(scope = document) {
     );
 
     // Aparece e some nas bordas da seção, para não haver corte seco.
-    gsap.fromTo(
-      layer,
-      { opacity: 0 },
-      {
-        opacity: 1,
-        ease: 'none',
+    //
+    // UMA timeline, não dois tweens: dois scrubs separados sobre a mesma
+    // propriedade escrevem opacity no mesmo frame e o resultado passa a
+    // depender da ordem de criação. Com keyframes num único scrub, existe
+    // um só dono do valor.
+    gsap
+      .timeline({
         scrollTrigger: {
           trigger: section,
-          start: 'top 85%',
-          end: 'top 40%',
+          start: 'top bottom',
+          end: 'bottom top',
           scrub: true,
         },
-      },
-    );
-
-    gsap.to(layer, {
-      opacity: 0,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'bottom 60%',
-        end: 'bottom 15%',
-        scrub: true,
-      },
-    });
+      })
+      .fromTo(layer, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'none' })
+      .to(layer, { opacity: 1, duration: 0.5, ease: 'none' })
+      .to(layer, { opacity: 0, duration: 0.25, ease: 'none' });
   });
 }
 
@@ -164,12 +156,12 @@ export function initScrollSkew() {
   if (!targets.length) return;
 
   const setSkew = gsap.quickSetter(targets, 'skewY', 'deg');
-  const clamp = gsap.utils.clamp(-4, 4);
+  const clamp = gsap.utils.clamp(-2.5, 2.5);
 
   ScrollTrigger.create({
     onUpdate: (self) => {
       // velocity vem em px/s; o divisor calibra a intensidade.
-      const skew = clamp(self.getVelocity() / -320);
+      const skew = clamp(self.getVelocity() / -420);
       setSkew(skew);
     },
   });

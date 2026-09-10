@@ -378,7 +378,7 @@ p {
   display: block;
   width: clamp(140px, 22vw, 260px);
   height: 12px;
-  margin-bottom: var(--space-8);
+  margin-top: var(--space-3);
   color: var(--color-neon-green);
   overflow: visible;
 }

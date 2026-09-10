@@ -71,4 +71,38 @@ export function initTiltCards(scope = document) {
 export function initInteractions(scope = document) {
   initMagneticButtons(scope);
   initTiltCards(scope);
+  initMediaHover(scope);
+}
+
+/**
+ * Zoom da imagem no hover do card.
+ *
+ * Precisa ser GSAP e não CSS: o `transform` do .media-img é escrito
+ * inline pelo wipe de entrada (scale) e pelo parallax (yPercent), e
+ * estilo inline vence regra CSS — um `:hover { transform: scale() }`
+ * simplesmente não teria efeito. Aqui as três animações compõem,
+ * porque o GSAP soma as propriedades no mesmo transform.
+ */
+export function initMediaHover(scope = document) {
+  if (env.isTouch || env.prefersReducedMotion) return;
+
+  const cards = scope.querySelectorAll(
+    '.project-card, .formation-card, .gallery-item, .platform-card',
+  );
+
+  cards.forEach((card) => {
+    const image = card.querySelector('.media-img');
+    if (!image) return;
+
+    const zoom = gsap.quickTo(image, 'scale', {
+      duration: 0.6,
+      ease: 'guz',
+      // O reveal também anima scale; overwrite evita os dois brigando
+      // se o mouse entrar no card durante a animação de entrada.
+      overwrite: 'auto',
+    });
+
+    card.addEventListener('pointerenter', () => zoom(1.06));
+    card.addEventListener('pointerleave', () => zoom(1));
+  });
 }

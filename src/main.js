@@ -90,24 +90,35 @@ async function init() {
   // 2. Scroll suave (registra o ScrollTrigger).
   initSmoothScroll();
 
-  // 3. Componentes e animações.
+  // 3. Componentes que não animam entrada — podem existir sob o preloader.
   initHeader();
   initContactForm();
   initAnimatedCursor();
+  initProjectLightbox();
+
+  // 4. Cena 3D pronta antes da capa subir, para não haver flash de canvas vazio.
+  heroScene = await setupHeroScene();
+
+  // 5. A capa sai.
+  await runPreloader();
+
+  /*
+    6. Só agora as animações de entrada.
+
+    Um ScrollTrigger com `once: true` dispara no instante em que é criado,
+    se o elemento já está na viewport. Criados antes do preloader, todos os
+    reveals acima da dobra rodavam atrás da capa e terminavam antes de ela
+    subir — a entrada do hero era gasta sem ninguém ver.
+  */
   initAllReveals();
   initInteractions();
   initMedia();
-  initProjectLightbox();
-
-  // 4. Cena 3D e as cenas de scroll que dependem dela.
-  heroScene = await setupHeroScene();
   initScrollScenes(heroScene);
 
-  // 5. Abertura.
-  await runPreloader();
-  playHeroIntro(heroScene);
-
+  // O layout mudou (capa removida, fontes carregadas): remede tudo.
   ScrollTrigger.refresh();
+
+  playHeroIntro(heroScene);
 }
 
 /**
