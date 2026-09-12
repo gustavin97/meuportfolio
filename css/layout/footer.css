@@ -141,3 +141,17 @@
     align-items: flex-start;
   }
 }
+
+/* Link de WhatsApp do rodapé: mesmo peso dos demais, com o
+   ícone da marca marcando o canal. */
+.footer-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.footer-whatsapp svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-whatsapp);
+}

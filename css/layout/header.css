@@ -239,3 +239,23 @@ body.is-menu-open .site-header {
     display: none;
   }
 }
+
+/* Atalho de WhatsApp no menu mobile. */
+.mobile-menu-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.mobile-menu-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-whatsapp);
+  font-weight: var(--font-weight-semibold);
+}
+
+.mobile-menu-whatsapp svg {
+  width: 18px;
+  height: 18px;
+}

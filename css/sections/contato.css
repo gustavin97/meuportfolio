@@ -206,3 +206,42 @@ a.contact-info-item:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==================== WHATSAPP ==================== */
+
+/* O cartão do WhatsApp ganha ícone à esquerda; os demais
+   continuam sendo uma coluna simples de título + valor. */
+.contact-info-item--whatsapp {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.contact-info-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.contact-info-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  color: var(--color-whatsapp);
+  background: rgba(37, 211, 102, 0.12);
+  border-radius: var(--radius-full);
+  transition: color var(--transition-base), background var(--transition-base);
+}
+
+.contact-info-item--whatsapp:hover {
+  border-color: var(--color-whatsapp);
+  background: rgba(37, 211, 102, 0.1);
+}
+
+.contact-info-item--whatsapp:hover .contact-info-icon {
+  color: var(--color-white);
+  background: var(--color-whatsapp);
+}

@@ -30,6 +30,19 @@ export const profile = {
   avatar: '/assets/images/gallery/perfil.jpg',
 };
 
+/* ==== WHATSAPP ==== */
+/**
+ * Link do WhatsApp com mensagem pré-preenchida.
+ * Centralizado aqui para que todos os botões do site (hero,
+ * contato, rodapé, menu mobile e botão flutuante) apontem
+ * para o mesmo número e o mesmo texto de abertura.
+ */
+export const whatsappMessage = 'Olá, Gustavo! Vi seu portfólio e gostaria de conversar sobre um projeto.';
+
+export function whatsappUrl(message = whatsappMessage) {
+  return `https://wa.me/${profile.phoneRaw}?text=${encodeURIComponent(message)}`;
+}
+
 /* ==== REDES SOCIAIS ==== */
 export const socials = [
   { id: 'github', label: 'GitHub', icon: 'github', url: 'https://github.com/gustavin97' },

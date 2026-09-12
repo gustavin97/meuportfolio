@@ -142,3 +142,72 @@ body.has-custom-cursor select {
     display: none;
   }
 }
+
+/* ==================== BOTÃO FLUTUANTE DE WHATSAPP ==================== */
+
+/* Injetado no body por renderWhatsAppFab(). Só aparece depois
+   que o hero sai da tela, para não disputar com os CTAs da dobra. */
+.whatsapp-fab {
+  position: fixed;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  z-index: var(--z-fixed);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  color: var(--color-white);
+  background: var(--color-whatsapp);
+  border-radius: var(--radius-full);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 0 0 0 rgba(37, 211, 102, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px) scale(0.9);
+  transition: opacity var(--transition-base), transform var(--transition-base),
+    visibility var(--transition-base), background var(--transition-base);
+}
+
+.whatsapp-fab.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.whatsapp-fab:hover {
+  background: var(--color-whatsapp-dark);
+}
+
+.whatsapp-fab-icon {
+  display: grid;
+  place-items: center;
+}
+
+/* O rótulo só existe no desktop: no mobile o botão vira um círculo. */
+.whatsapp-fab-label {
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  padding-right: var(--space-2);
+}
+
+@media (max-width: 640px) {
+  .whatsapp-fab {
+    right: var(--space-4);
+    bottom: var(--space-4);
+  }
+
+  .whatsapp-fab-label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-fab {
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+    transform: none;
+  }
+
+  .whatsapp-fab.is-visible {
+    transform: none;
+  }
+}

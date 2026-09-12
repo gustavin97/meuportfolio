@@ -19,6 +19,7 @@ import {
   stats,
   techCategories,
   timeline,
+  whatsappUrl,
 } from '../data/site.js';
 import { html, media, mount, raw } from '../utils/dom.js';
 
@@ -66,6 +67,9 @@ export function renderHeader() {
         )}
       </nav>
       <div class="mobile-menu-footer">
+        <a class="mobile-menu-whatsapp" href="${whatsappUrl()}" target="_blank" rel="noopener noreferrer">
+          <span data-lucide="whatsapp" aria-hidden="true"></span>Chamar no WhatsApp
+        </a>
         <a href="mailto:${profile.email}">${profile.email}</a>
       </div>
     `,
@@ -100,6 +104,16 @@ export function renderHero() {
         </a>
         <a href="#contact" class="btn btn-ghost" data-magnetic="0.3">
           <span>Entrar em contato</span>
+        </a>
+        <a
+          class="btn btn-whatsapp"
+          href="${whatsappUrl()}"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-magnetic="0.3"
+        >
+          <span data-lucide="whatsapp" aria-hidden="true"></span>
+          <span>WhatsApp</span>
         </a>
       </div>
 
@@ -411,9 +425,17 @@ export function renderContactInfo() {
   mount(
     '#contact .contact-info',
     html`
-      <a class="contact-info-item" href="https://wa.me/${profile.phoneRaw}" target="_blank" rel="noopener noreferrer">
-        <span class="contact-info-title">WhatsApp</span>
-        <span class="contact-info-value">${profile.phone}</span>
+      <a
+        class="contact-info-item contact-info-item--whatsapp"
+        href="${whatsappUrl()}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="contact-info-icon" data-lucide="whatsapp" aria-hidden="true"></span>
+        <span class="contact-info-text">
+          <span class="contact-info-title">WhatsApp</span>
+          <span class="contact-info-value">${profile.phone}</span>
+        </span>
       </a>
       <a class="contact-info-item" href="mailto:${profile.email}">
         <span class="contact-info-title">E-mail</span>
@@ -461,13 +483,49 @@ export function renderFooter() {
       <div class="footer-section">
         <h3>Contato</h3>
         <div class="footer-links">
-          <a href="tel:+${profile.phoneRaw}">${profile.phone}</a>
+          <a class="footer-whatsapp" href="${whatsappUrl()}" target="_blank" rel="noopener noreferrer">
+            <span data-lucide="whatsapp" aria-hidden="true"></span>${profile.phone}
+          </a>
           <a href="mailto:${profile.email}">${profile.email}</a>
           <span>${profile.location}</span>
         </div>
       </div>
     `,
   );
+}
+
+/* ==================== BOTÃO FLUTUANTE ==================== */
+
+/**
+ * Atalho fixo de WhatsApp. Fica fora das seções (direto no body)
+ * para acompanhar o scroll; o CSS o esconde enquanto o hero está
+ * visível, evitando concorrer com os CTAs da dobra inicial.
+ */
+export function renderWhatsAppFab() {
+  if (document.querySelector('.whatsapp-fab')) return;
+
+  const fab = document.createElement('a');
+  fab.className = 'whatsapp-fab';
+  fab.href = whatsappUrl();
+  fab.target = '_blank';
+  fab.rel = 'noopener noreferrer';
+  fab.setAttribute('aria-label', 'Conversar no WhatsApp');
+  fab.innerHTML = `
+    <span class="whatsapp-fab-icon" data-lucide="whatsapp" data-icon-size="26" aria-hidden="true"></span>
+    <span class="whatsapp-fab-label">Fale comigo</span>
+  `;
+  document.body.appendChild(fab);
+
+  const hero = document.querySelector('#hero');
+  if (!hero || !('IntersectionObserver' in window)) {
+    fab.classList.add('is-visible');
+    return;
+  }
+
+  new IntersectionObserver(
+    ([entry]) => fab.classList.toggle('is-visible', !entry.isIntersecting),
+    { threshold: 0.35 },
+  ).observe(hero);
 }
 
 /* ==================== ORQUESTRADOR ==================== */
@@ -483,4 +541,5 @@ export function renderAll() {
   renderProjects();
   renderContactInfo();
   renderFooter();
+  renderWhatsAppFab();
 }
