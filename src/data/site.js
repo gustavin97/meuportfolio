@@ -14,15 +14,15 @@
 /* ==== IDENTIDADE ==== */
 export const profile = {
   name: 'DEV GUZ',
-  fullName: 'Gustavo — Dev Guz',
+  fullName: 'Gustavo Costenaro Pereira',
   role: 'Desenvolvedor Full Stack',
   tagline:
-    'Criando soluções digitais modernas para web, automações, e-commerce e experiências inovadoras.',
+    'Transformo ideias em produtos digitais que geram presença, velocidade e resultado.',
   description:
-    'Transformo ideias em produtos digitais rápidos, acessíveis e memoráveis — do front-end imersivo ao back-end que sustenta a operação.',
+    'Sou Gustavo Costenaro Pereira, o DEV GUZ. Construo experiências web imersivas, e-commerces de alta conversão e automações sob medida para transformar projetos em ativos digitais que trabalham pelo seu negócio.',
   location: 'São Paulo — SP, Brasil',
   available: true,
-  availabilityLabel: 'Disponível para novos projetos',
+  availabilityLabel: 'Disponível para projetos que querem ir além',
   email: 'gustavoprogweb97@gmail.com',
   phone: '+55 (44) 99983-0226',
   phoneRaw: '5544999830226',
