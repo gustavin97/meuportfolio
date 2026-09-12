@@ -23,10 +23,9 @@ export const profile = {
   location: 'São Paulo — SP, Brasil',
   available: true,
   availabilityLabel: 'Disponível para novos projetos',
-  // TODO: trocar pelos dados reais antes do deploy.
-  email: 'contato@devguz.com',
-  phone: '+55 (11) 99999-9999',
-  phoneRaw: '5511999999999',
+  email: 'gustavoprogweb97@gmail.com',
+  phone: '+55 (44) 99983-0226',
+  phoneRaw: '5544999830226',
   resumeUrl: '/assets/curriculo-devguz.pdf',
   avatar: '/assets/images/gallery/perfil.jpg',
 };
