@@ -78,9 +78,7 @@ export const about = {
     'Gosto de detalhe: animação que guia a leitura, acessibilidade que não é opcional e build que carrega rápido mesmo em 3G.',
   ],
   gallery: [
-    { image: '/assets/images/gallery/workspace.jpg', alt: 'Setup de trabalho do Dev Guz', label: 'Workspace' },
-    { image: '/assets/images/gallery/codigo.jpg', alt: 'Código em desenvolvimento', label: 'Código' },
-    { image: '/assets/images/gallery/perfil.jpg', alt: 'Retrato do Dev Guz', label: 'Perfil' },
+    { image: '/assets/images/eu2.jpg', alt: 'Dev Guz no setup de trabalho', label: 'Dev Guz' },
   ],
 };
 

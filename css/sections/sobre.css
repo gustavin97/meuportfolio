@@ -43,15 +43,13 @@
 
 /* ==================== GALERIA ==================== */
 
+/* Um único card. O teto acompanha a resolução do arquivo (400px):
+   esticar além disso é o que deixava a foto macia. */
 .about-gallery {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-4);
-}
-
-/* A primeira foto ocupa a coluna inteira e ancora o mosaico. */
-.gallery-item:first-child {
-  grid-column: 1 / -1;
+  max-width: 400px;
+  margin-inline: auto;
 }
 
 .gallery-item {
@@ -61,8 +59,10 @@
   will-change: transform;
 }
 
-.gallery-item:first-child .media {
-  --media-ratio: 16 / 10;
+/* `contain` garante a foto inteira na moldura, sem corte, mesmo se
+   o arquivo for trocado por um de outra proporção. */
+.gallery-item .media-img {
+  object-fit: contain;
 }
 
 /* O zoom no hover é feito pelo GSAP (animations/interactions.js):

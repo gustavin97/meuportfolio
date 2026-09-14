@@ -175,8 +175,7 @@ export function renderAbout() {
                       src: item.image,
                       alt: item.alt,
                       fallback: item.label,
-                      ratio: '3/4',
-                      className: 'media--parallax',
+                      ratio: '1/1',
                     }),
                   )}
                 </figure>
