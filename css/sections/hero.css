@@ -240,6 +240,16 @@
   max-height: 78svh;
 }
 
+/* Camada da cena: cobre o hero inteiro para o campo de partículas
+   ir de ponta a ponta. A esfera continua ancorada em
+   .hero-3d-container, que agora só reserva o espaço no grid. */
+.hero-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
 /* O canvas é criado pelo Three.js e recebe esta classe. */
 .hero-canvas {
   position: absolute;
@@ -324,8 +334,12 @@
     inset: 0;
     max-height: none;
     aspect-ratio: auto;
-    opacity: 0.45;
     z-index: -1;
+  }
+
+  /* Sem coluna própria, a cena passa a correr atrás do texto. */
+  .hero-scene {
+    opacity: 0.45;
   }
 
   .hero-content {

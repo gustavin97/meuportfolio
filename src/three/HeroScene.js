@@ -23,6 +23,7 @@ import {
   BufferAttribute,
   BufferGeometry,
   Color,
+  Group,
   IcosahedronGeometry,
   LineBasicMaterial,
   LineSegments,
@@ -45,9 +46,9 @@ import {
 
 /** Orçamento visual por classe de dispositivo. */
 const TIER_SETTINGS = {
-  high: { particles: 2600, coreDetail: 48, wireDetail: 2 },
-  medium: { particles: 1200, coreDetail: 32, wireDetail: 1 },
-  low: { particles: 500, coreDetail: 16, wireDetail: 1 },
+  high: { particles: 2600, field: 3400, coreDetail: 48, wireDetail: 2 },
+  medium: { particles: 1200, field: 1500, coreDetail: 32, wireDetail: 1 },
+  low: { particles: 500, field: 600, coreDetail: 16, wireDetail: 1 },
 };
 
 const PALETTE = {
@@ -57,8 +58,11 @@ const PALETTE = {
 };
 
 export class HeroScene {
-  constructor(container) {
+  constructor(container, { anchor = null } = {}) {
+    // container: camada que cobre o hero inteiro (o canvas).
+    // anchor: elemento que dita ONDE a esfera fica dentro dessa camada.
     this.container = container;
+    this.anchor = anchor ?? container;
     this.settings = TIER_SETTINGS[env.tier] ?? TIER_SETTINGS.medium;
 
     this.scrollProgress = 0;
@@ -71,10 +75,16 @@ export class HeroScene {
 
     this._initRenderer();
     this._initCamera();
+    // Núcleo, casca e halo vivem num grupo que é reposicionado no resize.
+    this.coreGroup = new Group();
+    this.scene.add(this.coreGroup);
+
     this._initCore();
     this._initWireframe();
     this._initParticles();
+    this._initField();
     this._bindEvents();
+    this._positionCoreGroup();
   }
 
   /* ==================== SETUP ==================== */
@@ -123,7 +133,7 @@ export class HeroScene {
     });
 
     this.core = new Mesh(geometry, this.coreMaterial);
-    this.scene.add(this.core);
+    this.coreGroup.add(this.core);
   }
 
   _initWireframe() {
@@ -141,7 +151,7 @@ export class HeroScene {
     });
 
     this.wireframe = new LineSegments(geometry, this.wireMaterial);
-    this.scene.add(this.wireframe);
+    this.coreGroup.add(this.wireframe);
   }
 
   _initParticles() {
@@ -154,7 +164,7 @@ export class HeroScene {
     const colorKeys = Object.values(PALETTE);
 
     for (let i = 0; i < count; i += 1) {
-      // Distribuição em casca esférica: mantém o centro livre para o núcleo.
+      // Halo da esfera: casca esférica que mantém o centro livre para o núcleo.
       const radius = 5 + Math.random() * 13;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
@@ -194,7 +204,84 @@ export class HeroScene {
     });
 
     this.particles = new Points(geometry, this.particlesMaterial);
-    this.scene.add(this.particles);
+    this.coreGroup.add(this.particles);
+  }
+
+  /**
+   * Campo de partículas do hero inteiro.
+   * Ao contrário do halo, não orbita a esfera: preenche uma caixa larga
+   * o bastante para cobrir o frustum em qualquer aspecto, então o hero
+   * fica com micropartículas de ponta a ponta, inclusive atrás do texto.
+   */
+  _initField() {
+    const count = this.settings.field;
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const scales = new Float32Array(count);
+    const speeds = new Float32Array(count);
+
+    const colorKeys = Object.values(PALETTE);
+
+    for (let i = 0; i < count; i += 1) {
+      // X generoso cobre até ultrawide; Z em camadas dá o parallax de profundidade.
+      positions[i * 3] = (Math.random() * 2 - 1) * 26;
+      positions[i * 3 + 1] = (Math.random() * 2 - 1) * 13;
+      positions[i * 3 + 2] = -16 + Math.random() * 22;
+
+      const color = colorKeys[Math.floor(Math.random() * colorKeys.length)];
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
+
+      // Menores que as do halo: viram poeira de fundo, não competem com a esfera.
+      scales[i] = 0.25 + Math.random() * 0.95;
+      speeds[i] = 0.3 + Math.random() * 1.1;
+    }
+
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', new BufferAttribute(positions, 3));
+    geometry.setAttribute('aColor', new BufferAttribute(colors, 3));
+    geometry.setAttribute('aScale', new BufferAttribute(scales, 1));
+    geometry.setAttribute('aSpeed', new BufferAttribute(speeds, 1));
+
+    this.fieldMaterial = new ShaderMaterial({
+      vertexShader: particlesVertexShader,
+      fragmentShader: particlesFragmentShader,
+      transparent: true,
+      depthWrite: false,
+      blending: AdditiveBlending,
+      uniforms: {
+        uTime: { value: 0 },
+        uSize: { value: 2.2 },
+        uPixelRatio: { value: env.pixelRatio },
+        uMouse: { value: { x: 0, y: 0 } },
+        uScroll: { value: 0 },
+      },
+    });
+
+    this.field = new Points(geometry, this.fieldMaterial);
+    this.scene.add(this.field);
+  }
+
+  /**
+   * Move o grupo da esfera para o centro do elemento âncora.
+   * O canvas cobre o hero todo, então sem isso a esfera cairia no meio
+   * da tela, por cima do texto.
+   */
+  _positionCoreGroup() {
+    const rect = this.container.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
+    const anchorRect = this.anchor.getBoundingClientRect();
+    // Centro da âncora em coordenadas normalizadas do canvas (-1..1).
+    const ndcX = ((anchorRect.left + anchorRect.width / 2 - rect.left) / rect.width) * 2 - 1;
+    const ndcY = -(((anchorRect.top + anchorRect.height / 2 - rect.top) / rect.height) * 2 - 1);
+
+    // Tamanho do plano z=0 visto pela câmera, para converter NDC em unidades de mundo.
+    const visibleHeight = 2 * this.cameraBaseZ * Math.tan((this.camera.fov * Math.PI) / 360);
+    const visibleWidth = visibleHeight * this.camera.aspect;
+
+    this.coreGroup.position.set((ndcX * visibleWidth) / 2, (ndcY * visibleHeight) / 2, 0);
   }
 
   _bindEvents() {
@@ -275,6 +362,11 @@ export class HeroScene {
     this.particlesMaterial.uniforms.uMouse.value.y = this.pointer.y;
     this.particlesMaterial.uniforms.uScroll.value = this.scrollProgress;
 
+    this.fieldMaterial.uniforms.uTime.value = elapsed;
+    this.fieldMaterial.uniforms.uMouse.value.x = this.pointer.x;
+    this.fieldMaterial.uniforms.uMouse.value.y = this.pointer.y;
+    this.fieldMaterial.uniforms.uScroll.value = this.scrollProgress;
+
     // Núcleo e casca giram em sentidos opostos: cria profundidade sem pós-processamento.
     this.core.rotation.y += delta * 0.12;
     this.core.rotation.x = this.pointer.y * 0.25;
@@ -284,6 +376,10 @@ export class HeroScene {
     this.wireframe.rotation.x = this.pointer.y * -0.18;
 
     this.particles.rotation.y += delta * 0.015;
+
+    // Deriva lateral lenta: o campo atravessa o hero em vez de orbitar.
+    this.field.position.x = Math.sin(elapsed * 0.04) * 1.4;
+    this.field.rotation.z = Math.sin(elapsed * 0.03) * 0.03;
 
     // Câmera recua levemente e sobe conforme o scroll: sensação de afastar do objeto.
     this.camera.position.x += (this.pointer.x * 0.6 - this.camera.position.x) * damping;
@@ -305,6 +401,9 @@ export class HeroScene {
     this.renderer.setPixelRatio(env.pixelRatio);
     this.renderer.setSize(width, height);
     this.particlesMaterial.uniforms.uPixelRatio.value = env.pixelRatio;
+    this.fieldMaterial.uniforms.uPixelRatio.value = env.pixelRatio;
+
+    this._positionCoreGroup();
   }
 
   /** Libera GPU e listeners. Chamado se a preferência de movimento mudar. */

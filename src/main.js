@@ -55,7 +55,8 @@ let heroScene = null;
  */
 async function setupHeroScene() {
   const container = document.querySelector('.hero-3d-container');
-  if (!container) return null;
+  const sceneLayer = document.querySelector('.hero-scene');
+  if (!container || !sceneLayer) return null;
 
   if (!shouldRenderImmersive()) {
     container.classList.add('is-static');
@@ -64,7 +65,7 @@ async function setupHeroScene() {
 
   try {
     const { HeroScene } = await import('./three/HeroScene.js');
-    const scene = new HeroScene(container);
+    const scene = new HeroScene(sceneLayer, { anchor: container });
 
     let elapsed = 0;
     gsap.ticker.add((time, deltaMs) => {

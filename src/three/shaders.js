@@ -190,7 +190,9 @@ void main() {
   vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
 
   // Fade nas pontas do volume para não haver "pop" de partícula surgindo.
-  float distanceFade = 1.0 - smoothstep(12.0, 26.0, length(mvPosition.xyz));
+  // Medido em profundidade, não em raio: o campo se espalha por todo o hero
+  // e um fade radial apagaria tudo que está longe do centro da tela.
+  float distanceFade = 1.0 - smoothstep(20.0, 40.0, -mvPosition.z);
   vAlpha = distanceFade * mix(0.25, 1.0, depth);
 
   gl_Position = projectionMatrix * mvPosition;
