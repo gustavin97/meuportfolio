@@ -243,7 +243,7 @@
   transform-origin: left center;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1024px) {
   /* Sem pin: a barra de progresso não teria o que reportar. */
   .projects-progress {
     display: none;

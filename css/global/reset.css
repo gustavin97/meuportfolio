@@ -15,9 +15,9 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* Sem scroll-behavior: smooth — o scroll suave é feito pelo Lenis
+   (src/core/scroll.js). O smooth nativo disputa com o scrollTo
+   programático das âncoras e do menu mobile. */
 
 /* Reset de estilos de lista */
 ul,
@@ -51,11 +51,16 @@ select {
   padding: 0;
 }
 
-/* Remove outline padrão em foco */
-input:focus,
-textarea:focus,
-select:focus,
-button:focus {
+/*
+  Remove o outline do navegador apenas quando o foco NÃO veio do
+  teclado. A regra :focus-visible em global.css desenha o anel — e
+  antes perdia em especificidade para um `button:focus` daqui,
+  deixando botões e campos sem indicação de foco na navegação por Tab.
+*/
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
   outline: none;
 }
 
@@ -102,9 +107,18 @@ img {
   display: block;
 }
 
-/* Prevent text selection em elementos interativos */
+/*
+  Trava a seleção só em controles cujo texto é rótulo, nunca conteúdo.
+  Aplicar em todo `a` impedia o visitante de copiar o e-mail e o
+  telefone da seção de contato, que são links.
+*/
 button,
-a {
+.btn,
+.nav-link,
+.mobile-nav-link,
+.header-cta,
+.project-link,
+.whatsapp-fab {
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
