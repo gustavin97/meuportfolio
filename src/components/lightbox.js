@@ -10,7 +10,7 @@
  * É por isso que a transição parece contínua — não há
  * crossfade entre duas cópias, é o mesmo nó do DOM viajando.
  *
- * Acessibilidade: o overlay é um dialog modal, prende o foco,
+ * Acessibilidade: o overlay é um diálogo modal, prende o foco,
  * fecha no Escape e devolve o foco ao card de origem.
  * ==========================================
  */

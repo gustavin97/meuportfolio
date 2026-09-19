@@ -73,12 +73,12 @@ export const stats = [
 export const about = {
   heading: 'Minha jornada',
   paragraphs: [
-    'Sou desenvolvedor full stack com foco em experiências web de alta performance. Comecei pelo front-end e fui puxando o fio até back-end, integrações e automação.',
+    'Sou desenvolvedor full stack com foco em experiências web de alta performance. Comecei pelo front-end e fui puxando o fio até o back-end, integrações e automação.',
     'Hoje trabalho com e-commerce (Shopify, Nuvemshop, Tray), aplicações sob medida e automações que eliminam trabalho manual — sempre medindo o impacto no negócio, não só o código.',
-    'Gosto de detalhe: animação que guia a leitura, acessibilidade que não é opcional e build que carrega rápido mesmo em 3G.',
+    'Gosto de detalhes: animações que guiam a leitura, acessibilidade que não é opcional e um build que carrega rápido mesmo em 3G.',
   ],
   gallery: [
-    { image: '/assets/images/eu2.jpg', alt: 'Dev Guz no setup de trabalho', label: 'Dev Guz' },
+    { image: '/assets/images/eu2.jpg', alt: 'Dev Guz no ambiente de trabalho', label: 'Dev Guz' },
   ],
 };
 
@@ -87,7 +87,7 @@ export const timeline = [
   {
     year: '2021',
     title: 'Início dos estudos em programação',
-    description: 'HTML, CSS e JavaScript do zero. Primeiras interfaces e a descoberta de que dá pra viver disso.',
+    description: 'HTML, CSS e JavaScript do zero. Primeiras interfaces e a descoberta de que dá para viver disso.',
   },
   {
     year: '2022',
@@ -117,7 +117,7 @@ export const formations = [
     name: 'Análise e Desenvolvimento de Sistemas',
     institution: 'FATEC — 4º semestre.',
     description: 'Arquitetura de software, estruturas de dados, banco de dados e engenharia de requisitos.',
-    badge: 'Em progresso',
+    badge: 'Em andamento',
     status: 'progress',
     image: '/assets/images/formations/ads.jpg',
     fallback: 'ADS',
