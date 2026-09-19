@@ -349,7 +349,7 @@ p {
   height: 100%;
   object-fit: cover;
   /* Dessatura e escurece: a cor vem dos acentos, não da foto. */
-  filter: grayscale(0.45) brightness(0.34) contrast(1.1);
+  filter: grayscale(0.45) brightness(0.42) contrast(1.1);
 }
 
 /* Véu que garante contraste do texto mesmo em imagem clara. */
