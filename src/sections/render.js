@@ -396,7 +396,7 @@ function projectCard(project, index) {
 
         ${links.length
           ? raw(html`<div class="project-links">${raw(links.join(''))}</div>`)
-          : raw(html`<p class="project-links-empty">Estudo de caso em breve</p>`)}
+          : raw(html`<p class="project-links-empty">Estudo de caso em breve.</p>`)}
       </div>
     </article>
   `;

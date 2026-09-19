@@ -22,7 +22,7 @@ export const profile = {
     'Sou Gustavo Costenaro Pereira, o DEV GUZ. Construo experiências web imersivas, e-commerces de alta conversão e automações sob medida para transformar projetos em ativos digitais que trabalham pelo seu negócio.',
   location: 'São Paulo — SP, Brasil',
   available: true,
-  availabilityLabel: 'Disponível para projetos que querem ir além',
+  availabilityLabel: 'Disponível para projetos que querem ir além.',
   email: 'gustavoprogweb97@gmail.com',
   phone: '+55 (44) 99983-0226',
   phoneRaw: '5544999830226',
@@ -115,7 +115,7 @@ export const timeline = [
 export const formations = [
   {
     name: 'Análise e Desenvolvimento de Sistemas',
-    institution: 'FATEC — 4º semestre',
+    institution: 'FATEC — 4º semestre.',
     description: 'Arquitetura de software, estruturas de dados, banco de dados e engenharia de requisitos.',
     badge: 'Em progresso',
     status: 'progress',
