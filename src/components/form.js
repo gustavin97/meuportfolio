@@ -145,7 +145,7 @@ export function initContactForm() {
       form.reset();
       fields.forEach((field) => field.closest('.form-group')?.classList.remove('is-valid', 'is-invalid'));
       counter?.dispatchEvent(new Event('input'));
-      setStatus(form, 'success', 'Mensagem enviada. Retorno em até 24h úteis.');
+      setStatus(form, 'success', 'Mensagem enviada! Vou ler com carinho e retorno em até 24h úteis.');
     } catch (error) {
       console.error('[form] falha no envio:', error);
       setStatus(

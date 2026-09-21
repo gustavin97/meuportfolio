@@ -17,12 +17,12 @@ export const profile = {
   fullName: 'Gustavo Costenaro Pereira',
   role: 'Desenvolvedor Full Stack',
   tagline:
-    'Transformo ideias em produtos digitais que geram presença, velocidade e resultado.',
+    'Transformo boas ideias em produtos digitais que dão orgulho de mostrar e vontade de usar.',
   description:
-    'Sou Gustavo Costenaro Pereira, o DEV GUZ. Construo experiências web imersivas, e-commerces de alta conversão e automações sob medida para transformar projetos em ativos digitais que trabalham pelo seu negócio.',
+    'Sou Gustavo Costenaro Pereira, o DEV GUZ. Gosto de transformar desafios em experiências digitais bonitas, rápidas e que realmente ajudam um negócio a crescer.',
   location: 'São Paulo — SP, Brasil',
   available: true,
-  availabilityLabel: 'Disponível para projetos que querem ir além.',
+  availabilityLabel: 'Disponível para tirar ideias do papel e fazer acontecer.',
   email: 'gustavoprogweb97@gmail.com',
   phone: '+55 (44) 99983-0226',
   phoneRaw: '5544999830226',
@@ -37,7 +37,7 @@ export const profile = {
  * contato, rodapé, menu mobile e botão flutuante) apontem
  * para o mesmo número e o mesmo texto de abertura.
  */
-export const whatsappMessage = 'Olá, Gustavo! Vi seu portfólio e gostaria de conversar sobre um projeto.';
+export const whatsappMessage = 'Olá, Gustavo! Vi seu portfólio e quero tirar uma ideia do papel com você.';
 
 export function whatsappUrl(message = whatsappMessage) {
   return `https://wa.me/${profile.phoneRaw}?text=${encodeURIComponent(message)}`;
@@ -71,11 +71,11 @@ export const stats = [
 
 /* ==== SOBRE ==== */
 export const about = {
-  heading: 'Minha jornada',
+  heading: 'Vamos construir algo marcante?',
   paragraphs: [
-    'Sou desenvolvedor full stack com foco em experiências web de alta performance. Comecei pelo front-end e fui puxando o fio até o back-end, integrações e automação.',
-    'Hoje trabalho com e-commerce (Shopify, Nuvemshop, Tray), aplicações sob medida e automações que eliminam trabalho manual — sempre medindo o impacto no negócio, não só o código.',
-    'Gosto de detalhes: animações que guiam a leitura, acessibilidade que não é opcional e um build que carrega rápido mesmo em 3G.',
+    'Sou desenvolvedor full stack e adoro transformar ideias em experiências digitais que fazem sentido para pessoas de verdade. Comecei pelo front-end e fui puxando o fio até o back-end, integrações e automação.',
+    'Hoje trabalho com e-commerce (Shopify, Nuvemshop, Tray), aplicações sob medida e automações que devolvem tempo para as equipes. Cada projeto é uma oportunidade de simplificar, aproximar e gerar resultado.',
+    'Gosto de cuidar de cada detalhe: uma animação que convida a continuar, uma interface que dá prazer de usar e um site rápido para todo mundo. No fim, tecnologia boa é aquela que faz a vida ficar mais leve.',
   ],
   gallery: [
     { image: '/assets/images/eu2.jpg', alt: 'Dev Guz no ambiente de trabalho', label: 'Dev Guz' },
@@ -86,28 +86,28 @@ export const about = {
 export const timeline = [
   {
     year: '2021',
-    title: 'Início dos estudos em programação',
-    description: 'HTML, CSS e JavaScript do zero. Primeiras interfaces e a descoberta de que dá para viver disso.',
+    title: 'O primeiro passo',
+    description: 'HTML, CSS e JavaScript do zero. Primeiras interfaces e a descoberta de que criar na web podia ser muito mais do que um trabalho.',
   },
   {
     year: '2022',
-    title: 'Primeiros projetos completos',
-    description: 'Consolidei front-end e comecei a explorar back-end com Node.js, banco de dados e deploy.',
+    title: 'Ideias ganhando forma',
+    description: 'Consolidei o front-end e comecei a explorar back-end com Node.js, banco de dados e deploy — sempre com muita curiosidade.',
   },
   {
     year: '2023',
-    title: 'Freelance e clientes reais',
-    description: 'Sites e aplicações para pequenos negócios. Aprendi a traduzir requisito vago em escopo e prazo.',
+    title: 'Projetos com histórias reais',
+    description: 'Sites e aplicações para pequenos negócios. Aprendi a ouvir, fazer as perguntas certas e transformar desejos em caminhos claros.',
   },
   {
     year: '2024',
     title: 'Especialização em e-commerce',
-    description: 'Shopify, Nuvemshop e Tray: temas customizados, integrações de pagamento e otimização de conversão.',
+    description: 'Shopify, Nuvemshop e Tray: temas customizados, integrações de pagamento e experiências que ajudam cada visita a virar oportunidade.',
   },
   {
     year: '2025',
-    title: 'Automação e IA aplicada',
-    description: 'n8n, integração de APIs e agentes de IA em fluxos internos — eliminando trabalho repetitivo de clientes.',
+    title: 'Automação para abrir espaço',
+    description: 'n8n, integração de APIs e agentes de IA em fluxos internos — menos trabalho repetitivo e mais tempo para o que realmente importa.',
   },
 ];
 
