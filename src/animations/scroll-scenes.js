@@ -4,8 +4,9 @@
  * ==========================================
  * Animações que dependem da posição da página:
  * parallax, linha do tempo progressiva, galeria de
- * projetos horizontal (pinned) e vínculo do scroll
- * com a cena 3D do hero.
+ * projetos horizontal (pinned), faixa cinética guiada
+ * pela velocidade e vínculo do scroll com o mundo 3D
+ * (esfera do hero e formas de cada seção).
  * ==========================================
  */
 
@@ -44,6 +45,46 @@ export function heroScrollScene(heroScene) {
     ease: 'none',
     scrollTrigger: { trigger: hero, start: 'top top', end: '15% top', scrub: true },
   });
+}
+
+/**
+ * Liga cada seção a uma forma do mundo 3D.
+ *
+ * Cada capítulo tem uma janela de transição (topo da seção entre 75% e
+ * 25% da tela). O alvo da cena é a SOMA dos progressos dessas janelas:
+ * como elas não se sobrepõem, a soma é "capítulos já passados + fração
+ * do atual" — um valor contínuo, certo em qualquer direção e mesmo num
+ * salto pelo menu, sem depender da ordem em que os triggers disparam.
+ *
+ * Precisa ser criada DEPOIS do pin dos projetos, para as posições já
+ * contarem com o espaço que o pin acrescenta.
+ */
+export function worldMorphScene(heroScene) {
+  if (!heroScene || env.prefersReducedMotion) return;
+
+  // O índice 0 é o hero: a cena começa nele, não há janela de entrada.
+  const windows = heroScene.chapters
+    .slice(1)
+    .map((id) => document.getElementById(id))
+    .filter(Boolean)
+    .map((section) =>
+      ScrollTrigger.create({ trigger: section, start: 'top 75%', end: 'top 25%' }),
+    );
+
+  // Progresso calculado da posição, não lido de trigger.progress: rolando
+  // para cima o ScrollTrigger atualiza os triggers em ordem inversa, e a
+  // soma pegaria valores do frame anterior. start/end já vêm medidos.
+  const clamp = gsap.utils.clamp(0, 1);
+  const sync = (self) => {
+    const scroll = self.scroll();
+    const target = windows.reduce(
+      (sum, { start, end }) => sum + clamp((scroll - start) / (end - start)),
+      0,
+    );
+    heroScene.setMorphTarget(target);
+  };
+
+  ScrollTrigger.create({ start: 0, end: 'max', onUpdate: sync, onRefresh: sync });
 }
 
 /** Desenha a linha vertical da jornada conforme o usuário desce. */
@@ -142,6 +183,57 @@ export function projectsHorizontalScene() {
   }
 }
 
+/**
+ * Faixa cinética: os dois trilhos andam sozinhos, devagar, e o scroll
+ * acelera — rolar para cima inverte o sentido. A velocidade também
+ * inclina as letras, como se a faixa tivesse peso.
+ *
+ * Só ocupa o ticker enquanto a faixa está na tela.
+ */
+export function velocityMarqueeScene() {
+  const marquee = document.querySelector('.kinetic-marquee');
+  if (!marquee || env.prefersReducedMotion) return;
+
+  const tracks = gsap.utils.toArray('.marquee-track', marquee);
+  const rows = tracks.map((track) => ({
+    direction: Number(track.parentElement.dataset.direction) || 1,
+    setX: gsap.quickSetter(track, 'xPercent'),
+    x: 0,
+  }));
+  const setSkew = gsap.quickSetter(tracks, 'skewX', 'deg');
+
+  // O trilho tem o conteúdo duas vezes: -50% é o mesmo quadro que 0%.
+  const wrap = gsap.utils.wrap(-50, 0);
+  const BASE_SPEED = 1.6; // % do trilho por segundo, parado
+
+  let scrollDirection = 1;
+  let boost = 0; // velocidade extra vinda do scroll; decai sozinha
+
+  const tick = (time, deltaMs) => {
+    const delta = Math.min(deltaMs / 1000, 0.05);
+    boost *= Math.exp(-2.5 * delta);
+
+    const speed = (BASE_SPEED + boost) * scrollDirection;
+    rows.forEach((row) => {
+      row.x = wrap(row.x - speed * row.direction * delta);
+      row.setX(row.x);
+    });
+    setSkew(Math.min(boost * 0.9, 12) * -scrollDirection);
+  };
+
+  ScrollTrigger.create({
+    trigger: marquee,
+    start: 'top bottom',
+    end: 'bottom top',
+    onUpdate: (self) => {
+      scrollDirection = self.direction;
+      // velocity vem em px/s; o divisor calibra quanto o scroll empurra.
+      boost = Math.max(boost, Math.abs(self.getVelocity()) / 180);
+    },
+    onToggle: (self) => (self.isActive ? gsap.ticker.add(tick) : gsap.ticker.remove(tick)),
+  });
+}
+
 /** Cards de tecnologia entrando em cascata por categoria. */
 export function techGridScene() {
   if (env.prefersReducedMotion) return;
@@ -169,6 +261,8 @@ export function initScrollScenes(heroScene) {
   timelineScene();
   projectsHorizontalScene();
   techGridScene();
+  velocityMarqueeScene();
+  worldMorphScene(heroScene);
 
   // As fontes web mudam a altura do texto e invalidam as medidas.
   document.fonts?.ready.then(() => ScrollTrigger.refresh());

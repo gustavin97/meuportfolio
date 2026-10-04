@@ -28,6 +28,7 @@ import '../css/sections/projetos.css';
 import '../css/sections/contato.css';
 import '../css/components/ui.css';
 import '../css/components/lightbox.css';
+import '../css/components/marquee.css';
 
 /* ==== MÓDULOS ==== */
 import { env, onMotionPreferenceChange, shouldRenderImmersive } from './core/env.js';
@@ -55,7 +56,7 @@ let heroScene = null;
  */
 async function setupHeroScene() {
   const container = document.querySelector('.hero-3d-container');
-  const sceneLayer = document.querySelector('.hero-scene');
+  const sceneLayer = document.querySelector('.world-scene');
   if (!container || !sceneLayer) return null;
 
   if (!shouldRenderImmersive()) {

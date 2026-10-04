@@ -63,6 +63,11 @@
 
     <a class="skip-link" href="#main">Pular para o conteúdo</a>
 
+    <!-- Mundo 3D: canvas fixo atrás de todas as seções. No hero mostra a
+         esfera (ancorada em .hero-3d-container); depois, as formas de cada
+         capítulo. Fica acima das fotos de fundo e abaixo do conteúdo. -->
+    <div class="world-scene" aria-hidden="true"></div>
+
     <!-- ==================== HEADER ==================== -->
     <header class="site-header">
       <div class="header-content"><!-- renderizado por src/sections/render.js --></div>
@@ -80,10 +85,6 @@
           <span class="hero-gradient"></span>
           <span class="hero-grid"></span>
         </div>
-
-        <!-- Canvas em tela cheia: o campo de partículas ocupa todo o
-             hero, enquanto a esfera fica ancorada em .hero-3d-container. -->
-        <div class="hero-scene" aria-hidden="true"></div>
 
         <div class="hero-container">
           <div class="hero-content"><!-- renderizado --></div>
@@ -105,7 +106,7 @@
         </div>
 
         <div class="container">
-          <h2 class="section-title" data-reveal="up">Prazer, eu sou <span>o Dev Guz</span></h2>
+          <h2 class="section-title">Prazer, eu sou <span>o Dev Guz</span></h2>
           <div class="about-container"><!-- renderizado --></div>
         </div>
       </section>
@@ -117,7 +118,7 @@
         </div>
 
         <div class="container">
-          <h2 class="section-title" data-reveal="up">De onde vim e <span>onde quero chegar</span></h2>
+          <h2 class="section-title">De onde vim e <span>onde quero chegar</span></h2>
           <div class="timeline-container"><!-- renderizado --></div>
         </div>
       </section>
@@ -129,7 +130,7 @@
         </div>
 
         <div class="container">
-          <h2 class="section-title" data-reveal="up">Aprendizado que <span>vira prática</span></h2>
+          <h2 class="section-title">Aprendizado que <span>vira prática</span></h2>
           <div class="formations-grid"><!-- renderizado --></div>
         </div>
       </section>
@@ -141,10 +142,13 @@
         </div>
 
         <div class="container">
-          <h2 class="section-title" data-reveal="up">As ferramentas que <span>fazem acontecer</span></h2>
+          <h2 class="section-title">As ferramentas que <span>fazem acontecer</span></h2>
           <div class="technologies-container"><!-- renderizado --></div>
         </div>
       </section>
+
+      <!-- FAIXA CINÉTICA: decorativa, repete a stack em tipografia gigante -->
+      <div class="kinetic-marquee" aria-hidden="true"><!-- renderizado --></div>
 
       <!-- PLATAFORMAS -->
       <section id="platforms" class="section" data-bg>
@@ -153,7 +157,7 @@
         </div>
 
         <div class="container">
-          <h2 class="section-title" data-reveal="up">Onde boas ideias <span>ganham vida</span></h2>
+          <h2 class="section-title">Onde boas ideias <span>ganham vida</span></h2>
           <div class="platforms-grid"><!-- renderizado --></div>
         </div>
       </section>
@@ -165,7 +169,7 @@
         </div>
 
         <div class="projects-header container">
-          <h2 class="section-title" data-reveal="up">Projetos feitos para <span>brilhar</span></h2>
+          <h2 class="section-title">Projetos feitos para <span>brilhar</span></h2>
           <p class="section-lead" data-reveal="up">
             Ideias, cuidado e resultado — cada projeto pensado para fazer diferença de verdade.
           </p>
@@ -180,7 +184,7 @@
         </div>
 
         <div class="container">
-          <h2 class="section-title" data-reveal="up">Vamos tirar sua ideia <span>do papel?</span></h2>
+          <h2 class="section-title">Vamos tirar sua ideia <span>do papel?</span></h2>
 
           <div class="contact-container">
             <div class="contact-intro" data-reveal="up">

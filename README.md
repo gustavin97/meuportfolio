@@ -53,12 +53,14 @@ src/
     gsap.js             Registro dos plugins + curvas de easing da casa
     scroll.js           Lenis + ScrollTrigger no mesmo ticker
   three/
-    HeroScene.js        Cena 3D do hero
-    shaders.js          GLSL (ruído simplex, fresnel, partículas)
+    HeroScene.js        Mundo 3D fixo: esfera do hero, poeira e nuvem de formas
+    MorphField.js       Roteiro seção → forma (CHAPTERS) e a troca entre elas
+    shapes.js           As formas: esfera, logo, hélice, anéis, átomo, globo, cubo, avião
+    shaders.js          GLSL (ruído simplex, fresnel, partículas, morph)
   animations/
-    reveal.js           [data-reveal] [data-split] [data-counter] [data-scramble]
+    reveal.js           [data-reveal] [data-split] [data-counter] [data-scramble], títulos cinéticos
     media.js            Wipe das imagens, parallax, fundos de seção, skew por velocidade
-    scroll-scenes.js    Timeline, projetos horizontais, vínculo com o 3D
+    scroll-scenes.js    Timeline, projetos horizontais, faixa cinética, vínculo com o 3D
     interactions.js     Botões magnéticos, tilt dos cards
   components/           header, form, preloader, icons, cursor, lightbox
   sections/render.js    Gera o HTML das seções a partir dos dados
@@ -78,6 +80,13 @@ sites com WebGL.
 **A cena 3D é carregada sob demanda.** `HeroScene.js` entra por `import()`
 dinâmico. Em device sem WebGL ou com "reduzir movimento" ligado, o chunk do
 Three.js (~126 KB gzip) **nunca é baixado** — aparece um orbe estático no lugar.
+
+**O 3D conta a história da página.** O canvas é fixo atrás de todas as seções.
+Ao sair do hero, a esfera se dissolve numa nuvem de partículas que assume uma
+forma por seção: a marca no Sobre, uma hélice na Jornada, um avião de papel no
+Contato. Para trocar uma forma ou reposicioná-la, edite `CHAPTERS` em
+`three/MorphField.js`. As camadas são: fotos de fundo (z 0) → mundo 3D (z 1) →
+conteúdo (z 2). Por isso as seções **não** têm `z-index` próprio.
 
 **A carga visual se adapta ao aparelho.** `core/env.js` classifica o device em
 `high`/`medium`/`low` e ajusta contagem de partículas (2600 → 500), subdivisão da

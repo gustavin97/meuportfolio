@@ -1,10 +1,15 @@
 /**
  * ==========================================
- * HEROSCENE.JS — CENA 3D DO HERO
+ * HEROSCENE.JS — CENA 3D DA PÁGINA
  * ==========================================
- * Núcleo orgânico deformado por ruído + casca wireframe
- * contrarrotativa + campo de partículas com parallax de mouse
- * e mergulho guiado por scroll.
+ * Nasceu como a cena do hero e virou o "mundo" da página:
+ * o canvas é fixo atrás de todas as seções.
+ *
+ *  - Hero: núcleo orgânico deformado por ruído + casca wireframe
+ *    contrarrotativa + halo, com parallax de mouse.
+ *  - Campo de partículas: poeira que acompanha o site inteiro.
+ *  - MorphField: ao sair do hero o núcleo se dissolve numa nuvem
+ *    que assume uma forma por seção (ver three/MorphField.js).
  *
  * A cena NÃO tem loop próprio: `update()` é chamado pelo ticker
  * central (GSAP) em src/core/app.js, para existir um único
@@ -13,7 +18,8 @@
  * Uso:
  *   const scene = new HeroScene(container);
  *   scene.update(delta, elapsed);
- *   scene.setScrollProgress(0..1);
+ *   scene.setScrollProgress(0..1);   // progresso dentro do hero
+ *   scene.setMorphTarget(0..7);      // capítulo atual (contínuo)
  *   scene.dispose();
  * ==========================================
  */
@@ -43,6 +49,7 @@ import {
   particlesFragmentShader,
   particlesVertexShader,
 } from './shaders.js';
+import { CHAPTERS, MorphField } from './MorphField.js';
 
 /** Orçamento visual por classe de dispositivo. */
 const TIER_SETTINGS = {
@@ -59,13 +66,17 @@ const PALETTE = {
 
 export class HeroScene {
   constructor(container, { anchor = null } = {}) {
-    // container: camada que cobre o hero inteiro (o canvas).
-    // anchor: elemento que dita ONDE a esfera fica dentro dessa camada.
+    // container: camada fixa do tamanho da viewport (o canvas).
+    // anchor: elemento que dita ONDE a esfera fica no topo da página.
     this.container = container;
     this.anchor = anchor ?? container;
     this.settings = TIER_SETTINGS[env.tier] ?? TIER_SETTINGS.medium;
 
     this.scrollProgress = 0;
+    this.introOpacity = 0;
+    // Alvo vindo do scroll vs. valor suavizado, como no mouse.
+    this.morphTarget = 0;
+    this.morphValue = 0;
     this.isVisible = true;
     this.isDisposed = false;
 
@@ -83,6 +94,7 @@ export class HeroScene {
     this._initWireframe();
     this._initParticles();
     this._initField();
+    this._initMorph();
     this._bindEvents();
     this._positionCoreGroup();
   }
@@ -200,6 +212,7 @@ export class HeroScene {
         uPixelRatio: { value: env.pixelRatio },
         uMouse: { value: { x: 0, y: 0 } },
         uScroll: { value: 0 },
+        uOpacity: { value: 1 },
       },
     });
 
@@ -256,6 +269,7 @@ export class HeroScene {
         uPixelRatio: { value: env.pixelRatio },
         uMouse: { value: { x: 0, y: 0 } },
         uScroll: { value: 0 },
+        uOpacity: { value: 1 },
       },
     });
 
@@ -263,25 +277,53 @@ export class HeroScene {
     this.scene.add(this.field);
   }
 
+  /** Nuvem que vira as formas de cada capítulo. */
+  _initMorph() {
+    this.morph = new MorphField({
+      tier: env.tier,
+      palette: PALETTE,
+      pixelRatio: env.pixelRatio,
+    });
+    this.scene.add(this.morph.group);
+  }
+
+  /** Tamanho do plano z=0 visto de uma distância — converte NDC em unidades de mundo. */
+  _visibleSize(distance) {
+    const height = 2 * distance * Math.tan((this.camera.fov * Math.PI) / 360);
+    return { width: height * this.camera.aspect, height };
+  }
+
   /**
    * Move o grupo da esfera para o centro do elemento âncora.
-   * O canvas cobre o hero todo, então sem isso a esfera cairia no meio
-   * da tela, por cima do texto.
+   * O canvas cobre a viewport toda, então sem isso a esfera cairia no
+   * meio da tela, por cima do texto.
+   *
+   * O canvas é fixo: a posição é calculada como se a página estivesse
+   * no topo (scrollY somado), e a esfera fica parada enquanto o texto
+   * do hero sobe — é ela que se desfaz nas formas seguintes.
    */
   _positionCoreGroup() {
-    const rect = this.container.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
+    if (!width || !height) return;
 
     const anchorRect = this.anchor.getBoundingClientRect();
+    const top = anchorRect.top + window.scrollY;
     // Centro da âncora em coordenadas normalizadas do canvas (-1..1).
-    const ndcX = ((anchorRect.left + anchorRect.width / 2 - rect.left) / rect.width) * 2 - 1;
-    const ndcY = -(((anchorRect.top + anchorRect.height / 2 - rect.top) / rect.height) * 2 - 1);
+    const ndcX = ((anchorRect.left + anchorRect.width / 2) / width) * 2 - 1;
+    const ndcY = -(((top + anchorRect.height / 2) / height) * 2 - 1);
 
-    // Tamanho do plano z=0 visto pela câmera, para converter NDC em unidades de mundo.
-    const visibleHeight = 2 * this.cameraBaseZ * Math.tan((this.camera.fov * Math.PI) / 360);
-    const visibleWidth = visibleHeight * this.camera.aspect;
+    const hero = this._visibleSize(this.cameraBaseZ);
+    this.coreGroup.position.set((ndcX * hero.width) / 2, (ndcY * hero.height) / 2, 0);
 
-    this.coreGroup.position.set((ndcX * visibleWidth) / 2, (ndcY * visibleHeight) / 2, 0);
+    // As formas aparecem com a câmera já recuada (fim do hero).
+    const world = this._visibleSize(this.cameraBaseZ + 4);
+    this.morph.layout({
+      heroPosition: this.coreGroup.position,
+      halfWidth: world.width / 2,
+      halfHeight: world.height / 2,
+      isWide: width >= 1024,
+    });
   }
 
   _bindEvents() {
@@ -298,22 +340,14 @@ export class HeroScene {
     };
 
     // Em touch o parallax de mouse não existe; poupa listeners.
+    // O canvas tem pointer-events: none, então a saída é medida no documento.
     if (!env.isTouch) {
       window.addEventListener('pointermove', this._onPointerMove, { passive: true });
-      this.container.addEventListener('pointerleave', this._onPointerLeave);
+      document.documentElement.addEventListener('pointerleave', this._onPointerLeave);
     }
 
     this._onResize = () => this.resize();
     window.addEventListener('resize', this._onResize);
-
-    // Não renderiza o que ninguém está vendo.
-    this._observer = new IntersectionObserver(
-      ([entry]) => {
-        this.isVisible = entry.isIntersecting;
-      },
-      { threshold: 0 },
-    );
-    this._observer.observe(this.container);
 
     // Perda de contexto WebGL (troca de GPU, aba suspensa) não deve quebrar a página.
     this._onContextLost = (event) => {
@@ -334,11 +368,19 @@ export class HeroScene {
     this.scrollProgress = progress;
   }
 
+  /** Posição no roteiro de formas: 0 = hero, 1 = Sobre ... (contínuo). */
+  setMorphTarget(value) {
+    this.morphTarget = value;
+  }
+
+  /** Seções do roteiro, na ordem — para quem liga o scroll à cena. */
+  get chapters() {
+    return CHAPTERS.map((chapter) => chapter.section);
+  }
+
   /** Opacidade global da cena — usada pelo GSAP na entrada. */
   setOpacity(value) {
-    if (this.isDisposed) return;
-    this.coreMaterial.uniforms.uOpacity.value = value;
-    this.wireMaterial.opacity = value * 0.22;
+    this.introOpacity = value;
   }
 
   /**
@@ -353,6 +395,17 @@ export class HeroScene {
     const damping = 1 - Math.exp(-6 * delta);
     this.pointer.x += (this.pointerTarget.x - this.pointer.x) * damping;
     this.pointer.y += (this.pointerTarget.y - this.pointer.y) * damping;
+
+    // Mais lento que o mouse: a troca de forma tem que ser vista, não pulada.
+    this.morphValue += (this.morphTarget - this.morphValue) * (1 - Math.exp(-3.2 * delta));
+
+    // Núcleo e casca se apagam enquanto a nuvem assume; o halo vira resto de poeira.
+    const coreFade = 1 - Math.min(Math.max(this.morphValue / 0.5, 0), 1);
+    this.coreMaterial.uniforms.uOpacity.value = this.introOpacity * coreFade;
+    this.wireMaterial.opacity = this.introOpacity * coreFade * 0.22;
+    this.particlesMaterial.uniforms.uOpacity.value = 0.25 + coreFade * 0.75;
+    this.core.visible = coreFade > 0;
+    this.wireframe.visible = coreFade > 0;
 
     this.coreMaterial.uniforms.uTime.value = elapsed;
     this.coreMaterial.uniforms.uScroll.value = this.scrollProgress;
@@ -376,6 +429,10 @@ export class HeroScene {
     this.wireframe.rotation.x = this.pointer.y * -0.18;
 
     this.particles.rotation.y += delta * 0.015;
+
+    this.morph.update(this.morphValue, elapsed, this.introOpacity);
+    this.morph.group.rotation.y = this.pointer.x * 0.35;
+    this.morph.group.rotation.x = this.pointer.y * -0.2;
 
     // Deriva lateral lenta: o campo atravessa o hero em vez de orbitar.
     this.field.position.x = Math.sin(elapsed * 0.04) * 1.4;
@@ -402,6 +459,7 @@ export class HeroScene {
     this.renderer.setSize(width, height);
     this.particlesMaterial.uniforms.uPixelRatio.value = env.pixelRatio;
     this.fieldMaterial.uniforms.uPixelRatio.value = env.pixelRatio;
+    this.morph.setPixelRatio(env.pixelRatio);
 
     this._positionCoreGroup();
   }
@@ -414,11 +472,10 @@ export class HeroScene {
     window.removeEventListener('resize', this._onResize);
     if (!env.isTouch) {
       window.removeEventListener('pointermove', this._onPointerMove);
-      this.container.removeEventListener('pointerleave', this._onPointerLeave);
+      document.documentElement.removeEventListener('pointerleave', this._onPointerLeave);
     }
     this.renderer.domElement.removeEventListener('webglcontextlost', this._onContextLost);
     this.renderer.domElement.removeEventListener('webglcontextrestored', this._onContextRestored);
-    this._observer?.disconnect();
 
     this.scene.traverse((object) => {
       object.geometry?.dispose();

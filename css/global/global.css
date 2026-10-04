@@ -32,6 +32,39 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* ==================== MUNDO 3D ==================== */
+
+/*
+  Camadas da página, de baixo para cima:
+    0  fotos de fundo das seções (.section-bg) e fundo do hero
+    1  mundo 3D (.world-scene) — esfera, poeira e formas
+    2  conteúdo das seções
+  Por isso as seções NÃO têm z-index: se tivessem, cada uma
+  seria um contexto de empilhamento e o canvas não caberia no meio.
+*/
+.world-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* O canvas é criado pelo Three.js e recebe esta classe. */
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Em tela estreita o conteúdo ocupa a largura toda: a cena recua. */
+@media (max-width: 1024px) {
+  .world-scene {
+    opacity: 0.5;
+  }
+}
+
 /* Trava o scroll sem "pular" a página (o Lenis não usa overflow). */
 body.is-scroll-locked,
 body.is-menu-open {
@@ -104,9 +137,9 @@ p {
   padding-inline: var(--container-pad);
 }
 
+/* Sem z-index na seção: ver "MUNDO 3D" no topo deste arquivo. */
 .section {
   position: relative;
-  z-index: 2;
   padding-block: var(--section-pad-y);
 }
 
@@ -115,7 +148,12 @@ p {
   margin-bottom: var(--space-4);
 }
 
-.section-title span {
+/* Embrulho criado por initKineticTitles (reveal.js): não é destaque. */
+.section-title .title-text {
+  display: block;
+}
+
+.section-title span:not(.title-text) {
   background: var(--gradient-green-blue);
   -webkit-background-clip: text;
   background-clip: text;
@@ -328,13 +366,18 @@ p {
 */
 [data-bg] {
   position: relative;
-  isolation: isolate;
+}
+
+/* Conteúdo acima do mundo 3D (z 1); a foto de fundo fica abaixo (z 0). */
+[data-bg] > :not(.section-bg) {
+  position: relative;
+  z-index: 2;
 }
 
 .section-bg {
   position: absolute;
   inset: -12% 0;
-  z-index: -1;
+  z-index: 0;
   overflow: hidden;
   opacity: 0;
   pointer-events: none;

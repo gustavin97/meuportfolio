@@ -86,6 +86,7 @@ expect('fotos da galeria', '.gallery-item', about.gallery.length);
 expect('itens da jornada', '.timeline-item', timeline.length);
 expect('cards de formação', '.formation-card', formations.length);
 expect('chips de tecnologia', '.tech-item', techCount);
+expect('trilhos da faixa cinética', '.marquee-row', 2);
 expect('cards de plataforma', '.platform-card', platforms.length);
 expect('cards de projeto', '.project-card', projects.length);
 expect('métricas de projeto', '.project-metric', metricCount);

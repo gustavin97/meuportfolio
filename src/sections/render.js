@@ -291,6 +291,47 @@ export function renderTechnologies() {
   );
 }
 
+/* ==================== FAIXA CINÉTICA ==================== */
+
+/**
+ * Tipografia gigante entre Tecnologias e Plataformas.
+ * Decorativa (aria-hidden no HTML): repete a stack que a seção
+ * acima já lista de forma acessível. Cada trilho leva o conteúdo
+ * duas vezes — deslocar -50% volta ao mesmo quadro, sem emenda.
+ */
+export function renderMarquee() {
+  const names = techCategories.flatMap((category) => category.items.map((item) => item.name));
+  const half = Math.ceil(names.length / 2);
+  const rows = [names.slice(0, half), names.slice(half)];
+
+  mount(
+    '.kinetic-marquee',
+    html`
+      ${raw(
+        rows
+          .map((row, index) => {
+            const items = row
+              .map(
+                (name, i) => html`
+                  <span class="marquee-item${i % 2 ? ' is-filled' : ''}">${name}</span>
+                  <span class="marquee-sep">✦</span>
+                `,
+              )
+              .join('');
+
+            // Trilhos em sentidos opostos: um puxa para cada lado.
+            return html`
+              <div class="marquee-row" data-direction="${index % 2 ? '-1' : '1'}">
+                <div class="marquee-track">${raw(items + items)}</div>
+              </div>
+            `;
+          })
+          .join(''),
+      )}
+    `,
+  );
+}
+
 /* ==================== PLATAFORMAS ==================== */
 
 export function renderPlatforms() {
@@ -536,6 +577,7 @@ export function renderAll() {
   renderTimeline();
   renderFormations();
   renderTechnologies();
+  renderMarquee();
   renderPlatforms();
   renderProjects();
   renderContactInfo();

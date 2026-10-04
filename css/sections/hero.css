@@ -7,9 +7,11 @@
   ==========================================
 */
 
+/* Sem z-index de propósito: o fundo do hero fica abaixo do mundo 3D
+   (.world-scene, z 1) e o conteúdo acima dele. Com z-index aqui, a
+   seção viraria um contexto de empilhamento e o canvas não caberia no meio. */
 .section-hero {
   position: relative;
-  z-index: 2;
   min-height: 100svh;
   display: flex;
   align-items: center;
@@ -149,16 +151,17 @@
   font-weight: var(--font-weight-extrabold);
   line-height: 0.92;
   letter-spacing: -0.04em;
-  background: linear-gradient(
+  --title-gradient: linear-gradient(
     120deg,
     var(--color-white) 20%,
     var(--color-neon-green) 55%,
     var(--color-neon-blue) 85%
   );
+  background: var(--title-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* SplitType precisa de perspectiva para o rotateX dos caracteres. */
+  /* O SplitText precisa de perspectiva para o rotateX dos caracteres. */
   perspective: 800px;
 }
 
@@ -166,6 +169,25 @@
 .hero-title-primary .char {
   display: inline-block;
   transform-origin: bottom center;
+}
+
+/*
+  Depois de fatiado, o gradiente passa do título para cada letra
+  (o clip do pai quebra com filhos em 3D — ver alignGradient em
+  animations/reveal.js). Cada letra recebe o gradiente do tamanho
+  do título inteiro, deslocado até a sua posição.
+*/
+.hero-title-primary.is-split {
+  background: none;
+}
+
+.hero-title-primary.is-split .char {
+  background: var(--title-gradient);
+  background-size: var(--split-w) 100%;
+  background-position: calc(var(--split-x) * -1) 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .hero-title-secondary {
@@ -240,24 +262,8 @@
   max-height: 78svh;
 }
 
-/* Camada da cena: cobre o hero inteiro para o campo de partículas
-   ir de ponta a ponta. A esfera continua ancorada em
-   .hero-3d-container, que agora só reserva o espaço no grid. */
-.hero-scene {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* O canvas é criado pelo Three.js e recebe esta classe. */
-.hero-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-}
+/* O canvas vive em .world-scene (global.css); este container só
+   reserva o espaço no grid e diz onde a esfera fica. */
 
 /* Fallback: sem WebGL ou com movimento reduzido, um orbe estático
    no lugar da cena — o layout não muda. */
@@ -335,11 +341,6 @@
     max-height: none;
     aspect-ratio: auto;
     z-index: -1;
-  }
-
-  /* Sem coluna própria, a cena passa a correr atrás do texto. */
-  .hero-scene {
-    opacity: 0.45;
   }
 
   .hero-content {

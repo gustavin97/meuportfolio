@@ -160,6 +160,7 @@ uniform float uSize;
 uniform float uPixelRatio;
 uniform vec2 uMouse;
 uniform float uScroll;
+uniform float uOpacity;
 
 attribute float aScale;
 attribute float aSpeed;
@@ -193,7 +194,7 @@ void main() {
   // Medido em profundidade, não em raio: o campo se espalha por todo o hero
   // e um fade radial apagaria tudo que está longe do centro da tela.
   float distanceFade = 1.0 - smoothstep(20.0, 40.0, -mvPosition.z);
-  vAlpha = distanceFade * mix(0.25, 1.0, depth);
+  vAlpha = distanceFade * mix(0.25, 1.0, depth) * uOpacity;
 
   gl_Position = projectionMatrix * mvPosition;
   // Tamanho atenuado pela distância — perspectiva correta em pontos.
@@ -215,5 +216,83 @@ void main() {
   glow = pow(glow, 2.0);
 
   gl_FragColor = vec4(vColor, glow * vAlpha);
+}
+`;
+
+/* ==========================================
+   MORPH — partículas que viram cada forma
+   ========================================== */
+
+/*
+  Cada ponto conhece só duas formas: de onde vem (aFrom) e para
+  onde vai (aTo). Quem troca o par é o JS, ao cruzar um capítulo;
+  aqui só se interpola. Assim a GPU carrega 2 atributos de
+  posição em vez de um por forma.
+*/
+export const morphVertexShader = /* glsl */ `
+uniform float uTime;
+uniform float uProgress;
+uniform float uSize;
+uniform float uPixelRatio;
+
+attribute vec3 aFrom;
+attribute vec3 aTo;
+attribute vec3 aColor;
+attribute float aScale;
+attribute float aRandom;
+
+varying vec3 vColor;
+varying float vAlpha;
+
+${simplexNoise3D}
+
+void main() {
+  vColor = aColor;
+
+  // Atraso individual: a forma se desfaz em onda, não em bloco.
+  float delay = aRandom * 0.4;
+  float t = clamp((uProgress - delay) / 0.6, 0.0, 1.0);
+  t = t * t * (3.0 - 2.0 * t);
+
+  vec3 pos = mix(aFrom, aTo, t);
+
+  // No meio do caminho as partículas se espalham pelo ruído:
+  // a transição parece uma dissolução, não um deslize.
+  float burst = sin(t * 3.14159265);
+  vec3 seed = aFrom * 0.35 + aTo * 0.2;
+  vec3 drift = vec3(
+    snoise(seed + vec3(uTime * 0.15, 0.0, 0.0)),
+    snoise(seed + vec3(0.0, uTime * 0.15, 7.3)),
+    snoise(seed + vec3(4.1, 0.0, uTime * 0.15))
+  );
+  pos += drift * (burst * 2.4 + 0.05);
+
+  vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+
+  // Cintilação lenta, defasada por partícula.
+  float twinkle = 0.65 + 0.35 * sin(uTime * (1.0 + aRandom * 2.0) + aRandom * 40.0);
+  vAlpha = twinkle * (1.0 - burst * 0.35);
+
+  gl_Position = projectionMatrix * mvPosition;
+  gl_PointSize = uSize * aScale * uPixelRatio * (14.0 / -mvPosition.z);
+}
+`;
+
+export const morphFragmentShader = /* glsl */ `
+uniform float uOpacity;
+
+varying vec3 vColor;
+varying float vAlpha;
+
+void main() {
+  vec2 uv = gl_PointCoord - 0.5;
+  float dist = length(uv);
+  if (dist > 0.5) discard;
+
+  // Núcleo mais duro que o das partículas de fundo: a forma precisa de contorno.
+  float glow = 1.0 - smoothstep(0.0, 0.5, dist);
+  glow = pow(glow, 1.6);
+
+  gl_FragColor = vec4(vColor, glow * vAlpha * uOpacity);
 }
 `;

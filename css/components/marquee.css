@@ -1,0 +1,75 @@
+/*
+  ==========================================
+  MARQUEE.CSS — FAIXA CINÉTICA
+  ==========================================
+  Tipografia gigante entre Tecnologias e Plataformas.
+  O movimento vem de animations/scroll-scenes.js
+  (velocityMarqueeScene); aqui só forma e ritmo.
+  ==========================================
+*/
+
+.kinetic-marquee {
+  /* Acima do mundo 3D, como o conteúdo das seções. */
+  position: relative;
+  z-index: 2;
+  padding-block: clamp(2rem, 6vw, 5rem);
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+  /* Some nas laterais: a faixa parece não ter começo nem fim. */
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.marquee-row + .marquee-row {
+  margin-top: clamp(0.25rem, 1vw, 0.75rem);
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-item {
+  flex-shrink: 0;
+  padding-inline: clamp(1rem, 2.5vw, 2rem);
+  font-family: var(--font-secondary);
+  font-size: clamp(3rem, 9vw, 8.5rem);
+  font-weight: var(--font-weight-extrabold);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* Contorno vazado: presença sem pesar como um bloco de texto. */
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.28);
+}
+
+/* Um sim, um não: o preenchido em gradiente dá o ritmo da leitura. */
+.marquee-item.is-filled {
+  background: var(--gradient-green-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+.marquee-row:nth-child(2) .marquee-item {
+  font-size: clamp(2rem, 5.5vw, 5rem);
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.18);
+}
+
+.marquee-row:nth-child(2) .marquee-item.is-filled {
+  background: var(--gradient-blue-purple);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.marquee-sep {
+  flex-shrink: 0;
+  font-size: clamp(1.25rem, 3vw, 2.5rem);
+  color: var(--color-neon-green);
+  opacity: 0.6;
+}

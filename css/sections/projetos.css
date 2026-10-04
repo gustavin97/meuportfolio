@@ -12,6 +12,18 @@
   /* A seção é fixada pelo ScrollTrigger: overflow visível
      evita que o pin crie barra horizontal. */
   overflow: hidden;
+  /*
+    O pin deixa a seção em position: fixed, que sempre cria contexto
+    de empilhamento — no meio do scroll o mundo 3D passaria por cima
+    dos cards. Isolada desde o início, ela fica inteira acima do canvas;
+    o fundo fica mais transparente para o cubo aparecer por trás.
+  */
+  z-index: 2;
+}
+
+.section-projects .section-bg img,
+.section-projects .section-bg::after {
+  opacity: 0.35;
 }
 
 .projects-header {

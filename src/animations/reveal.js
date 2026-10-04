@@ -10,6 +10,7 @@
  *   data-split="chars|words|lines"
  *   data-counter="100" data-counter-suffix="%"
  *   data-scramble
+ *   .section-title  → título cinético (linhas + destaque embaralhado)
  *
  * Usa o SplitText do GSAP (liberado na 3.15) em vez do
  * split-type: ele já devolve o texto original ao leitor de
@@ -72,6 +73,22 @@ export function initReveals(scope = document) {
 
 /* ==================== TEXTO FATIADO ==================== */
 
+/**
+ * Texto em gradiente (background-clip: text) não sobrevive a filhos com
+ * transform 3D: o Chrome pinta o fundo do pai como caixas sólidas. Então
+ * cada pedaço pinta o próprio gradiente, do tamanho do elemento inteiro e
+ * deslocado até a sua posição — a soma parece um gradiente só.
+ * O CSS usa as variáveis só quando o elemento tem a classe .is-split.
+ */
+function alignGradient(element, pieces) {
+  const box = element.getBoundingClientRect();
+  element.style.setProperty('--split-w', `${box.width}px`);
+  pieces.forEach((piece) => {
+    piece.style.setProperty('--split-x', `${piece.getBoundingClientRect().left - box.left}px`);
+  });
+  element.classList.add('is-split');
+}
+
 export function initSplitText(scope = document) {
   const targets = scope.querySelectorAll('[data-split]:not([data-split-ready])');
 
@@ -90,12 +107,19 @@ export function initSplitText(scope = document) {
     // carrega ou a largura muda, e devolve a animação para reaplicar.
     SplitText.create(element, {
       type: granularity === 'lines' ? 'lines' : `words, ${granularity}`,
+      // O SplitText não põe classe por padrão; o CSS (ex.: .hero-title-primary .char) depende delas.
+      wordsClass: 'word',
+      charsClass: 'char',
+      linesClass: 'line',
       // A máscara recorta na altura da linha: o texto sobe "de dentro" dela.
       mask: granularity === 'lines' ? 'lines' : undefined,
       autoSplit: true,
       onSplit(self) {
         const pieces = self[granularity] ?? self.words;
         if (!pieces?.length) return undefined;
+
+        // Medido ANTES do tween: o rotateX inicial distorceria as posições.
+        alignGradient(element, pieces);
 
         return gsap.fromTo(
           pieces,
@@ -110,6 +134,78 @@ export function initSplitText(scope = document) {
             scrollTrigger: { trigger: element, start: 'top 85%', once: true },
           },
         );
+      },
+    });
+  });
+}
+
+/* ==================== TÍTULOS CINÉTICOS ==================== */
+
+/** Alfabeto do embaralhamento: o mesmo do cargo no hero. */
+const SCRAMBLE_CHARS = '01<>/{}[]#$%&';
+
+/**
+ * Títulos de seção sobem linha a linha de dentro de uma máscara e o
+ * trecho em destaque (o <span> com gradiente) se resolve a partir de
+ * caracteres embaralhados — o mesmo vocabulário do cargo no hero.
+ *
+ * Fatiar por LINHA, não por letra: o destaque usa background-clip:
+ * text, que quebra quando cada letra vira um inline-block transformado.
+ *
+ * O texto é embrulhado num .title-text antes de fatiar: o risco SVG
+ * (initTitleUnderlines) fica fora dele e sobrevive quando o SplitText
+ * refaz a divisão num resize. Por isso esta função roda antes dele.
+ */
+export function initKineticTitles(scope = document) {
+  scope.querySelectorAll('.section-title:not([data-kinetic-ready])').forEach((title) => {
+    title.setAttribute('data-kinetic-ready', '');
+    if (env.prefersReducedMotion) return;
+
+    const text = document.createElement('span');
+    text.className = 'title-text';
+    text.append(...title.childNodes);
+    title.prepend(text);
+
+    SplitText.create(text, {
+      type: 'lines',
+      mask: 'lines',
+      linesClass: 'title-line',
+      autoSplit: true,
+      onSplit(self) {
+        const timeline = gsap.timeline({
+          scrollTrigger: { trigger: title, start: 'top 85%', once: true },
+        });
+
+        timeline.from(self.lines, {
+          yPercent: 115,
+          rotate: 4,
+          transformOrigin: '0% 100%',
+          duration: DURATION.slow,
+          ease: 'guz',
+          stagger: 0.12,
+        });
+
+        // As linhas são <div>: os <span> que restam são os destaques
+        // (fatiados em pedaços, se o destaque quebrou de linha).
+        text.querySelectorAll('span').forEach((highlight) => {
+          timeline.to(
+            highlight,
+            {
+              duration: 1.2,
+              scrambleText: {
+                text: highlight.textContent,
+                chars: SCRAMBLE_CHARS,
+                speed: 0.5,
+                revealDelay: 0.25,
+              },
+              ease: 'none',
+            },
+            0.2,
+          );
+        });
+
+        // Devolver a timeline deixa o SplitText recriá-la no mesmo ponto após um resize.
+        return timeline;
       },
     });
   });
@@ -133,7 +229,7 @@ export function initScramble(scope = document) {
       duration: 1.6,
       scrambleText: {
         text,
-        chars: '01<>/{}[]#$%&',
+        chars: SCRAMBLE_CHARS,
         speed: 0.4,
         revealDelay: 0.35,
       },
@@ -224,5 +320,7 @@ export function initAllReveals(scope = document) {
   initReveals(scope);
   initScramble(scope);
   initCounters(scope);
+  // Antes do risco: ele precisa ficar fora do texto que é fatiado.
+  initKineticTitles(scope);
   initTitleUnderlines(scope);
 }
