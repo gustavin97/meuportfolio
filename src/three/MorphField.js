@@ -58,7 +58,7 @@ const smoothstep = (edge0, edge1, x) => {
 };
 
 export class MorphField {
-  constructor({ tier, palette, pixelRatio }) {
+  constructor({ tier, palette, pixelRatio, interaction }) {
     this.count = PARTICLE_COUNT[tier] ?? PARTICLE_COUNT.medium;
     // Formas são geradas sob demanda: o logo precisa de canvas 2D
     // e nenhuma delas é necessária antes do primeiro scroll.
@@ -104,6 +104,8 @@ export class MorphField {
         uSize: { value: 2.4 },
         uPixelRatio: { value: pixelRatio },
         uOpacity: { value: 0 },
+        // Cursor e onda do clique: uniforms compartilhados com a HeroScene.
+        ...interaction,
       },
     });
 

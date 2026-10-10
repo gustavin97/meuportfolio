@@ -151,6 +151,47 @@ void main() {
 `;
 
 /* ==========================================
+   INTERAÇÃO EM TELA — cursor e onda de choque
+   ========================================== */
+
+/*
+  Deslocamento feito em espaço de tela (NDC), depois da projeção:
+  assim o raio do cursor e o anel da onda têm o mesmo tamanho
+  visual em qualquer profundidade, e não é preciso raycast.
+
+  uPointer.xy = cursor em NDC, uPointer.z = presença (0..1)
+  uShock.xy   = origem do clique em NDC, uShock.z = idade em segundos
+*/
+export const screenInteraction = /* glsl */ `
+uniform vec3 uPointer;
+uniform vec3 uShock;
+uniform float uAspect;
+
+// Devolve o brilho extra da onda (para o fragment acender o anel).
+float applyScreenInteraction(inout vec4 clip, float strength) {
+  vec2 ndc = clip.xy / clip.w;
+  vec2 aspect = vec2(uAspect, 1.0);
+
+  // Cursor: empurra para fora num raio pequeno, como mão na água.
+  vec2 toPointer = (ndc - uPointer.xy) * aspect;
+  float pointerDist = length(toPointer) + 1e-4;
+  float push = smoothstep(0.32, 0.0, pointerDist) * uPointer.z;
+
+  // Onda: anel que se expande a partir do clique e perde força.
+  vec2 toShock = (ndc - uShock.xy) * aspect;
+  float shockDist = length(toShock) + 1e-4;
+  float radius = uShock.z * 1.7;
+  float life = 1.0 - smoothstep(0.0, 1.4, uShock.z);
+  float ring = exp(-pow((shockDist - radius) / 0.11, 2.0)) * life;
+
+  vec2 offset = (toPointer / pointerDist) * push * 0.11 + (toShock / shockDist) * ring * 0.16;
+  ndc += offset * strength / aspect;
+  clip.xy = ndc * clip.w;
+  return ring;
+}
+`;
+
+/* ==========================================
    PARTÍCULAS — campo estelar com drift
    ========================================== */
 
@@ -161,6 +202,9 @@ uniform float uPixelRatio;
 uniform vec2 uMouse;
 uniform float uScroll;
 uniform float uOpacity;
+uniform float uPageScroll;  // scroll da página em telas
+uniform float uWrap;        // 1 = campo que acompanha a página inteira
+uniform float uVelocity;    // 0..1 velocidade de scroll suavizada
 
 attribute float aScale;
 attribute float aSpeed;
@@ -170,6 +214,7 @@ varying vec3 vColor;
 varying float vAlpha;
 
 ${simplexNoise3D}
+${screenInteraction}
 
 void main() {
   vColor = aColor;
@@ -188,17 +233,31 @@ void main() {
   // Scroll empurra o campo em direção à câmera, criando sensação de mergulho.
   pos.z += uScroll * 12.0;
 
+  // Depois do hero, a poeira sobe com a página: as camadas próximas mais
+  // rápido que as distantes. O wrap recicla o volume, que é maior que a tela.
+  float wrapFade = 1.0;
+  if (uWrap > 0.5) {
+    pos.y = mod(pos.y + uPageScroll * mix(1.2, 5.5, depth) + 13.0, 26.0) - 13.0;
+    wrapFade = 1.0 - smoothstep(10.5, 13.0, abs(pos.y));
+  }
+
   vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
 
   // Fade nas pontas do volume para não haver "pop" de partícula surgindo.
   // Medido em profundidade, não em raio: o campo se espalha por todo o hero
   // e um fade radial apagaria tudo que está longe do centro da tela.
   float distanceFade = 1.0 - smoothstep(20.0, 40.0, -mvPosition.z);
-  vAlpha = distanceFade * mix(0.25, 1.0, depth) * uOpacity;
 
-  gl_Position = projectionMatrix * mvPosition;
+  vec4 clip = projectionMatrix * mvPosition;
+  float ring = applyScreenInteraction(clip, mix(0.5, 1.0, depth));
+
+  // Scroll rápido acende o campo: sensação de velocidade sem motion blur.
+  float rush = 1.0 + uVelocity * 1.4;
+  vAlpha = distanceFade * wrapFade * mix(0.25, 1.0, depth) * uOpacity * (rush + ring * 2.5);
+
+  gl_Position = clip;
   // Tamanho atenuado pela distância — perspectiva correta em pontos.
-  gl_PointSize = uSize * aScale * uPixelRatio * (14.0 / -mvPosition.z);
+  gl_PointSize = uSize * aScale * uPixelRatio * (14.0 / -mvPosition.z) * (1.0 + uVelocity * 0.6 + ring);
 }
 `;
 
@@ -245,6 +304,7 @@ varying vec3 vColor;
 varying float vAlpha;
 
 ${simplexNoise3D}
+${screenInteraction}
 
 void main() {
   vColor = aColor;
@@ -271,9 +331,11 @@ void main() {
 
   // Cintilação lenta, defasada por partícula.
   float twinkle = 0.65 + 0.35 * sin(uTime * (1.0 + aRandom * 2.0) + aRandom * 40.0);
-  vAlpha = twinkle * (1.0 - burst * 0.35);
+  vec4 clip = projectionMatrix * mvPosition;
+  float ring = applyScreenInteraction(clip, 0.8);
+  vAlpha = twinkle * (1.0 - burst * 0.35) * (1.0 + ring * 2.0);
 
-  gl_Position = projectionMatrix * mvPosition;
+  gl_Position = clip;
   gl_PointSize = uSize * aScale * uPixelRatio * (14.0 / -mvPosition.z);
 }
 `;

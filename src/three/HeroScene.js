@@ -40,6 +40,7 @@ import {
   ShaderMaterial,
   WireframeGeometry,
   WebGLRenderer,
+  Vector3,
 } from 'three';
 
 import { env } from '../core/env.js';
@@ -92,6 +93,7 @@ export class HeroScene {
 
     this._initRenderer();
     this._initCamera();
+    this._initInteraction();
     // Núcleo, casca e halo vivem num grupo que é reposicionado no resize.
     this.coreGroup = new Group();
     this.scene.add(this.coreGroup);
@@ -130,6 +132,23 @@ export class HeroScene {
     this.camera = new PerspectiveCamera(50, aspect, 0.1, 100);
     this.camera.position.set(0, 0, 10);
     this.cameraBaseZ = 10;
+  }
+
+  /**
+   * Uniforms de interação compartilhados por todas as nuvens de pontos.
+   * São os MESMOS objetos em cada material: atualizar aqui atualiza todos.
+   */
+  _initInteraction() {
+    this.interaction = {
+      uPointer: { value: new Vector3(0, 0, 0) },
+      // Idade alta = nenhuma onda ativa no início.
+      uShock: { value: new Vector3(0, 0, 10) },
+      uAspect: { value: this.camera.aspect },
+    };
+    this.pointerPresence = 0;
+    this.pointerPresenceTarget = 0;
+    // Pulso do clique no núcleo: 1 no clique, decai sozinho.
+    this.pulse = 0;
   }
 
   _initCore() {
@@ -221,6 +240,10 @@ export class HeroScene {
         uMouse: { value: { x: 0, y: 0 } },
         uScroll: { value: 0 },
         uOpacity: { value: 1 },
+        uPageScroll: { value: 0 },
+        uWrap: { value: 0 }, // o halo orbita a esfera, não acompanha a página
+        uVelocity: { value: 0 },
+        ...this.interaction,
       },
     });
 
@@ -278,6 +301,10 @@ export class HeroScene {
         uMouse: { value: { x: 0, y: 0 } },
         uScroll: { value: 0 },
         uOpacity: { value: 1 },
+        uPageScroll: { value: 0 },
+        uWrap: { value: 1 },
+        uVelocity: { value: 0 },
+        ...this.interaction,
       },
     });
 
@@ -291,6 +318,7 @@ export class HeroScene {
       tier: env.tier,
       palette: PALETTE,
       pixelRatio: env.pixelRatio,
+      interaction: this.interaction,
     });
     this.scene.add(this.morph.group);
   }
@@ -352,12 +380,26 @@ export class HeroScene {
       // Normaliza para -1..1 com origem no centro do container.
       this.pointerTarget.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       this.pointerTarget.y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+      this.pointerPresenceTarget = 1;
     };
 
     this._onPointerLeave = () => {
       this.pointerTarget.x = 0;
       this.pointerTarget.y = 0;
+      this.pointerPresenceTarget = 0;
     };
+
+    // Clique (ou toque) solta uma onda de choque a partir do ponto.
+    this._onPointerDown = (event) => {
+      const rect = this.container.getBoundingClientRect();
+      this.interaction.uShock.value.set(
+        ((event.clientX - rect.left) / rect.width) * 2 - 1,
+        -(((event.clientY - rect.top) / rect.height) * 2 - 1),
+        0,
+      );
+      this.pulse = 1;
+    };
+    window.addEventListener('pointerdown', this._onPointerDown, { passive: true });
 
     // Em touch o parallax de mouse não existe; poupa listeners.
     // O canvas tem pointer-events: none, então a saída é medida no documento.
@@ -445,6 +487,26 @@ export class HeroScene {
     this.fieldMaterial.uniforms.uMouse.value.y = this.pointer.y;
     this.fieldMaterial.uniforms.uScroll.value = this.scrollProgress;
 
+    // O alvo decai sozinho: parar de rolar devolve tudo ao repouso.
+    this.velocityTarget *= Math.exp(-3 * delta);
+    this.velocity += (this.velocityTarget - this.velocity) * (1 - Math.exp(-8 * delta));
+    const pageScroll = window.scrollY / Math.max(window.innerHeight, 1);
+
+    this.fieldMaterial.uniforms.uPageScroll.value = pageScroll;
+    this.fieldMaterial.uniforms.uVelocity.value = this.velocity;
+    this.particlesMaterial.uniforms.uVelocity.value = this.velocity;
+
+    // Interação compartilhada: cursor, onda do clique e proporção da tela.
+    this.pointerPresence +=
+      (this.pointerPresenceTarget - this.pointerPresence) * (1 - Math.exp(-4 * delta));
+    this.interaction.uPointer.value.set(this.pointer.x, this.pointer.y, this.pointerPresence);
+    this.interaction.uShock.value.z += delta;
+    this.interaction.uAspect.value = this.camera.aspect;
+
+    // O clique também "bate" no núcleo: a deformação estoura e assenta.
+    this.pulse *= Math.exp(-2.8 * delta);
+    this.coreMaterial.uniforms.uDistortion.value = 0.55 + this.pulse * 0.75;
+
     // Núcleo e casca giram em sentidos opostos: cria profundidade sem pós-processamento.
     this.core.rotation.y += delta * 0.12;
     this.core.rotation.x = this.pointer.y * 0.25;
@@ -455,12 +517,7 @@ export class HeroScene {
 
     this.particles.rotation.y += delta * 0.015;
 
-    // O alvo decai sozinho: parar de rolar devolve tudo ao repouso.
-    this.velocityTarget *= Math.exp(-3 * delta);
-    this.velocity += (this.velocityTarget - this.velocity) * (1 - Math.exp(-8 * delta));
-
     this.orbits.update(delta, elapsed, this.introOpacity * coreFade, this.velocity);
-    const pageScroll = window.scrollY / Math.max(window.innerHeight, 1);
     this.crystals.update(delta, elapsed, {
       scroll: pageScroll,
       velocity: this.velocity,
@@ -515,6 +572,7 @@ export class HeroScene {
       window.removeEventListener('pointermove', this._onPointerMove);
       document.documentElement.removeEventListener('pointerleave', this._onPointerLeave);
     }
+    window.removeEventListener('pointerdown', this._onPointerDown);
     this.renderer.domElement.removeEventListener('webglcontextlost', this._onContextLost);
     this.renderer.domElement.removeEventListener('webglcontextrestored', this._onContextRestored);
 
