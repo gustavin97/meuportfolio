@@ -100,13 +100,35 @@ export function initChapterHud() {
     });
   };
 
-  sections.forEach((section) => {
-    ScrollTrigger.create({
-      trigger: section.element,
-      start: 'top center',
-      end: 'bottom center',
-      onToggle: (self) => self.isActive && show(section.index),
+  /*
+    Capítulo = última seção cujo topo já passou do meio da tela.
+    Calculado da posição, não de onToggle por seção: num salto (menu,
+    âncora) os triggers intermediários não disparam, e em trechos sem
+    seção (a faixa cinética) nenhum fica ativo — o HUD congelava.
+  */
+  let tops = [];
+  const measure = () => {
+    tops = sections.map(
+      (section) => section.element.getBoundingClientRect().top + window.scrollY,
+    );
+  };
+  const sync = (self) => {
+    const probe = self.scroll() + window.innerHeight / 2;
+    let active = 0;
+    tops.forEach((top, i) => {
+      if (top <= probe) active = i;
     });
+    show(sections[active].index);
+  };
+  ScrollTrigger.create({
+    start: 0,
+    end: 'max',
+    onRefreshInit: measure,
+    onRefresh: (self) => {
+      measure();
+      sync(self);
+    },
+    onUpdate: sync,
   });
   ticks[0]?.classList.add('is-passed');
 
