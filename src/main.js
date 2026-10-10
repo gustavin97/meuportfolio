@@ -48,6 +48,7 @@ import { initAllReveals } from './animations/reveal.js';
 import { initScrollScenes } from './animations/scroll-scenes.js';
 import { initInteractions } from './animations/interactions.js';
 import { initMedia } from './animations/media.js';
+import { initFooterSignature } from './animations/footer.js';
 import { initMediaFallbacks } from './utils/dom.js';
 
 /** Cena 3D — só carregada se o dispositivo comportar. */
@@ -122,6 +123,7 @@ async function init() {
   initScrollScenes(heroScene);
   initChapterHud();
   initSound();
+  initFooterSignature();
 
   // O layout mudou (capa removida, fontes carregadas): remede tudo.
   ScrollTrigger.refresh();

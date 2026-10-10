@@ -155,3 +155,67 @@
   height: 16px;
   color: var(--color-whatsapp);
 }
+
+/* ==================== ASSINATURA GIGANTE ==================== */
+
+/*
+  Duas cópias do nome sobrepostas: o contorno fica sempre visível;
+  o preenchimento em gradiente só aparece dentro de um círculo que
+  segue o cursor (mask com --spot-x/--spot-y vindos do JS).
+*/
+.footer-giant {
+  position: relative;
+  overflow: hidden;
+  padding-inline: var(--container-pad);
+  font-family: var(--font-secondary);
+  font-size: clamp(4rem, 19vw, 20rem);
+  font-weight: var(--font-weight-extrabold);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+  --spot-x: 50%;
+  --spot-y: 50%;
+  --spot-r: 0px;
+}
+
+.footer-giant span {
+  display: block;
+}
+
+.footer-giant-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.12);
+}
+
+.footer-giant-fill {
+  position: absolute;
+  inset: 0;
+  padding-inline: inherit;
+  background: linear-gradient(120deg, var(--color-neon-green), var(--color-neon-blue) 50%, var(--color-neon-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-mask-image: radial-gradient(
+    circle var(--spot-r) at var(--spot-x) var(--spot-y),
+    #000 0%,
+    #000 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle var(--spot-r) at var(--spot-x) var(--spot-y),
+    #000 0%,
+    #000 40%,
+    transparent 100%
+  );
+}
+
+/* Sem cursor (touch) o nome fica aceso por inteiro, um pouco apagado. */
+@media (pointer: coarse) {
+  .footer-giant-fill {
+    -webkit-mask-image: none;
+    mask-image: none;
+    opacity: 0.35;
+  }
+}
