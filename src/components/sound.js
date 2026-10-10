@@ -151,6 +151,8 @@ export function initSound() {
     if (target && !target.contains(event.relatedTarget)) blip(1200 + Math.random() * 300, 0.06, 0.025);
   });
 
+  window.addEventListener('portfolio:launch', () => playCue('launch'));
+
   // Scroll rápido abre o filtro do pad.
   ScrollTrigger.create({
     onUpdate: (self) => {

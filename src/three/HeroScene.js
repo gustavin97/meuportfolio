@@ -409,6 +409,13 @@ export class HeroScene {
     };
     window.addEventListener('pointerdown', this._onPointerDown, { passive: true });
 
+    // Envio do formulário: o avião decola e a onda sai do botão.
+    this._onLaunch = (event) => {
+      this._onPointerDown({ clientX: event.detail.x, clientY: event.detail.y });
+      this.velocityTarget = 1; // cometas e cristais disparam junto
+    };
+    window.addEventListener('portfolio:launch', this._onLaunch);
+
     // Em touch o parallax de mouse não existe; poupa listeners.
     // O canvas tem pointer-events: none, então a saída é medida no documento.
     if (!env.isTouch) {
@@ -585,6 +592,7 @@ export class HeroScene {
       document.documentElement.removeEventListener('pointerleave', this._onPointerLeave);
     }
     window.removeEventListener('pointerdown', this._onPointerDown);
+    window.removeEventListener('portfolio:launch', this._onLaunch);
     this.renderer.domElement.removeEventListener('webglcontextlost', this._onContextLost);
     this.renderer.domElement.removeEventListener('webglcontextrestored', this._onContextRestored);
 

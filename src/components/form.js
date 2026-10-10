@@ -17,6 +17,62 @@ import { env } from '../core/env.js';
 
 const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || '';
 
+/**
+ * O ícone de enviar decola: uma cópia do avião sai do botão numa
+ * curva para o alto, girando e sumindo, e o ícone original volta
+ * com um "pop". Avisa o resto da página por evento — a cena 3D
+ * solta uma onda de choque no ponto e o som toca a decolagem.
+ */
+function launchPlane(button) {
+  const icon = button.querySelector('svg');
+  if (!icon) return;
+  const rect = icon.getBoundingClientRect();
+
+  window.dispatchEvent(
+    new CustomEvent('portfolio:launch', {
+      detail: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+    }),
+  );
+
+  if (env.prefersReducedMotion) return;
+
+  const flyer = icon.cloneNode(true);
+  flyer.setAttribute('aria-hidden', 'true');
+  Object.assign(flyer.style, {
+    position: 'fixed',
+    left: `${rect.left}px`,
+    top: `${rect.top}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    zIndex: 'var(--z-notification)',
+    pointerEvents: 'none',
+    color: 'var(--color-neon-green)',
+    filter: 'drop-shadow(0 0 8px var(--color-neon-green))',
+  });
+  document.body.appendChild(flyer);
+
+  const dx = window.innerWidth - rect.left + 80;
+  const dy = -(rect.top + 120);
+
+  gsap
+    .timeline({ onComplete: () => flyer.remove() })
+    .set(icon, { opacity: 0 })
+    // Recua um pouco antes de partir: antecipação dá peso ao arranque.
+    .to(flyer, { x: -10, y: 8, rotation: -12, duration: 0.18, ease: 'power2.out' })
+    .to(flyer, {
+      keyframes: {
+        x: [-10, dx * 0.25, dx * 0.6, dx],
+        y: [8, dy * 0.1, dy * 0.55, dy],
+        rotation: [-12, -20, -35, -40],
+        scale: [1, 1.6, 1.3, 0.6],
+        easeEach: 'none',
+      },
+      duration: 1.1,
+      ease: 'power2.in',
+    })
+    .fromTo(icon, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2)' }, '-=0.4');
+}
+
 const rules = {
   name: {
     validate: (v) => v.trim().length >= 3 && v.trim().length <= 100,
@@ -132,6 +188,7 @@ export function initContactForm() {
 
     if (!ENDPOINT) {
       setStatus(form, 'info', 'Abrindo seu cliente de e-mail...');
+      launchPlane(button);
       fallbackToMailto(data);
       return;
     }
@@ -145,6 +202,7 @@ export function initContactForm() {
       form.reset();
       fields.forEach((field) => field.closest('.form-group')?.classList.remove('is-valid', 'is-invalid'));
       counter?.dispatchEvent(new Event('input'));
+      launchPlane(button);
       setStatus(form, 'success', 'Mensagem enviada! Vou ler com carinho e retorno em até 24h úteis.');
     } catch (error) {
       console.error('[form] falha no envio:', error);
