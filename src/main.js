@@ -43,6 +43,7 @@ import { initAnimatedCursor } from './components/cursor.js';
 import { initProjectLightbox } from './components/lightbox.js';
 import { initChapterHud } from './components/hud.js';
 import { initSound } from './components/sound.js';
+import { initEasterEgg } from './components/easter-egg.js';
 import { playHeroIntro, runPreloader } from './components/preloader.js';
 import { initAllReveals } from './animations/reveal.js';
 import { initScrollScenes } from './animations/scroll-scenes.js';
@@ -124,6 +125,7 @@ async function init() {
   initChapterHud();
   initSound();
   initFooterSignature();
+  initEasterEgg();
 
   // O layout mudou (capa removida, fontes carregadas): remede tudo.
   ScrollTrigger.refresh();

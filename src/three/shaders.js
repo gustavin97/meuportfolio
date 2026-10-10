@@ -205,6 +205,8 @@ uniform float uOpacity;
 uniform float uPageScroll;  // scroll da página em telas
 uniform float uWrap;        // 1 = campo que acompanha a página inteira
 uniform float uVelocity;    // 0..1 velocidade de scroll suavizada
+uniform float uTravel;      // distância percorrida no hiperespaço
+uniform float uWarp;        // 0..1 intensidade do hiperespaço
 
 attribute float aScale;
 attribute float aSpeed;
@@ -237,6 +239,9 @@ void main() {
   // rápido que as distantes. O wrap recicla o volume, que é maior que a tela.
   float wrapFade = 1.0;
   if (uWrap > 0.5) {
+    // Hiperespaço: o volume avança em direção à câmera e recicla no fundo,
+    // parando antes da câmera (z 10) para nenhum ponto explodir de tamanho.
+    if (uTravel > 0.0) pos.z = mod(pos.z + 18.0 + uTravel, 26.0) - 18.0;
     pos.y = mod(pos.y + uPageScroll * mix(1.2, 5.5, depth) + 13.0, 26.0) - 13.0;
     wrapFade = 1.0 - smoothstep(10.5, 13.0, abs(pos.y));
   }
@@ -252,12 +257,12 @@ void main() {
   float ring = applyScreenInteraction(clip, mix(0.5, 1.0, depth));
 
   // Scroll rápido acende o campo: sensação de velocidade sem motion blur.
-  float rush = 1.0 + uVelocity * 1.4;
+  float rush = 1.0 + uVelocity * 1.4 + uWarp * 2.0;
   vAlpha = distanceFade * wrapFade * mix(0.25, 1.0, depth) * uOpacity * (rush + ring * 2.5);
 
   gl_Position = clip;
   // Tamanho atenuado pela distância — perspectiva correta em pontos.
-  gl_PointSize = uSize * aScale * uPixelRatio * (14.0 / -mvPosition.z) * (1.0 + uVelocity * 0.6 + ring);
+  gl_PointSize = uSize * aScale * uPixelRatio * (14.0 / -mvPosition.z) * (1.0 + uVelocity * 0.6 + ring + uWarp * 2.5);
 }
 `;
 

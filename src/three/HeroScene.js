@@ -86,6 +86,11 @@ export class HeroScene {
 
     // Velocidade de scroll normalizada (0..1): alvo cai sozinho, valor segue suave.
     this.velocityTarget = 0;
+
+    // Hiperespaço (easter egg): intensidade suavizada e distância percorrida.
+    this.warpTarget = 0;
+    this.warp = 0;
+    this.travel = 0;
     this.velocity = 0;
 
     // Alvo do mouse vs. valor suavizado — a diferença é o que dá a inércia.
@@ -244,6 +249,8 @@ export class HeroScene {
         uOpacity: { value: 1 },
         uPageScroll: { value: 0 },
         uWrap: { value: 0 }, // o halo orbita a esfera, não acompanha a página
+        uTravel: { value: 0 },
+        uWarp: { value: 0 },
         uVelocity: { value: 0 },
         ...this.interaction,
       },
@@ -305,6 +312,8 @@ export class HeroScene {
         uOpacity: { value: 1 },
         uPageScroll: { value: 0 },
         uWrap: { value: 1 },
+        uTravel: { value: 0 },
+        uWarp: { value: 0 },
         uVelocity: { value: 0 },
         ...this.interaction,
       },
@@ -416,6 +425,16 @@ export class HeroScene {
     };
     window.addEventListener('portfolio:launch', this._onLaunch);
 
+    // Easter egg (components/easter-egg.js): alguns segundos de hiperespaço.
+    this._onHyperspace = () => {
+      this.warpTarget = 1;
+      clearTimeout(this._warpTimer);
+      this._warpTimer = setTimeout(() => {
+        this.warpTarget = 0;
+      }, 3200);
+    };
+    window.addEventListener('portfolio:hyperspace', this._onHyperspace);
+
     // Em touch o parallax de mouse não existe; poupa listeners.
     // O canvas tem pointer-events: none, então a saída é medida no documento.
     if (!env.isTouch) {
@@ -509,6 +528,7 @@ export class HeroScene {
 
     this.fieldMaterial.uniforms.uPageScroll.value = pageScroll;
     this.fieldMaterial.uniforms.uVelocity.value = this.velocity;
+
     this.particlesMaterial.uniforms.uVelocity.value = this.velocity;
 
     // Interação compartilhada: cursor, onda do clique e proporção da tela.
@@ -558,6 +578,17 @@ export class HeroScene {
     this.camera.position.x += (this.pointer.x * 0.6 - this.camera.position.x) * damping;
     this.camera.position.y += (this.pointer.y * 0.4 - this.camera.position.y) * damping;
     this.camera.position.z = this.cameraBaseZ + this.scrollProgress * 4;
+
+    // Hiperespaço: o campo corre para a câmera e a lente abre (FOV), como um salto.
+    this.warp += (this.warpTarget - this.warp) * (1 - Math.exp(-2.5 * delta));
+    this.travel += delta * this.warp * 38;
+    this.fieldMaterial.uniforms.uTravel.value = this.travel;
+    this.fieldMaterial.uniforms.uWarp.value = this.warp;
+    const fov = 50 + this.warp * 28;
+    if (Math.abs(this.camera.fov - fov) > 0.01) {
+      this.camera.fov = fov;
+      this.camera.updateProjectionMatrix();
+    }
     this.camera.lookAt(0, 0, 0);
 
     this.renderer.render(this.scene, this.camera);
@@ -593,6 +624,8 @@ export class HeroScene {
     }
     window.removeEventListener('pointerdown', this._onPointerDown);
     window.removeEventListener('portfolio:launch', this._onLaunch);
+    window.removeEventListener('portfolio:hyperspace', this._onHyperspace);
+    clearTimeout(this._warpTimer);
     this.renderer.domElement.removeEventListener('webglcontextlost', this._onContextLost);
     this.renderer.domElement.removeEventListener('webglcontextrestored', this._onContextRestored);
 

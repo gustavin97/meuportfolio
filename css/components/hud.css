@@ -166,3 +166,38 @@ body::after {
     opacity: 1;
   }
 }
+
+/* ==================== HIPERESPAÇO (EASTER EGG) ==================== */
+
+/* Clarão do salto: branco azulado, só por um instante. */
+.warp-flash {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-notification);
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 50%, #ffffff 0%, rgba(0, 191, 255, 0.6) 40%, transparent 75%);
+}
+
+.warp-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  z-index: var(--z-notification);
+  translate: -50% 0;
+  padding: 12px 22px;
+  border: 1px solid rgba(0, 255, 136, 0.45);
+  border-radius: 999px;
+  background: rgba(5, 5, 5, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 0 24px rgba(0, 255, 136, 0.25);
+  color: var(--color-white);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+}
