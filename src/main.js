@@ -30,6 +30,7 @@ import '../css/components/ui.css';
 import '../css/components/lightbox.css';
 import '../css/components/marquee.css';
 import '../css/components/hud.css';
+import '../css/components/sound.css';
 
 /* ==== MÓDULOS ==== */
 import { env, onMotionPreferenceChange, shouldRenderImmersive } from './core/env.js';
@@ -41,6 +42,7 @@ import { initContactForm } from './components/form.js';
 import { initAnimatedCursor } from './components/cursor.js';
 import { initProjectLightbox } from './components/lightbox.js';
 import { initChapterHud } from './components/hud.js';
+import { initSound } from './components/sound.js';
 import { playHeroIntro, runPreloader } from './components/preloader.js';
 import { initAllReveals } from './animations/reveal.js';
 import { initScrollScenes } from './animations/scroll-scenes.js';
@@ -119,6 +121,7 @@ async function init() {
   initMedia();
   initScrollScenes(heroScene);
   initChapterHud();
+  initSound();
 
   // O layout mudou (capa removida, fontes carregadas): remede tudo.
   ScrollTrigger.refresh();

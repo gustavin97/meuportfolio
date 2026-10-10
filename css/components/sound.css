@@ -1,0 +1,84 @@
+/*
+  ==========================================
+  SOUND.CSS — BOTÃO DE SOM AMBIENTE
+  ==========================================
+  Equalizador de quatro barras: paradas quando o som
+  está desligado, dançando quando ligado.
+  ==========================================
+*/
+
+.sound-toggle {
+  position: fixed;
+  left: clamp(16px, 2vw, 32px);
+  bottom: 24px;
+  z-index: var(--z-fixed);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--color-gray);
+  font-family: var(--font-secondary);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.sound-toggle:hover,
+.sound-toggle.is-on {
+  border-color: rgba(0, 255, 136, 0.45);
+  color: var(--color-white);
+}
+
+.sound-toggle:focus-visible {
+  outline: 2px solid var(--color-neon-green);
+  outline-offset: 3px;
+}
+
+.sound-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.sound-bars i {
+  width: 2px;
+  height: 3px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: height 0.3s ease;
+}
+
+.sound-toggle.is-on .sound-bars i {
+  background: var(--color-neon-green);
+  box-shadow: 0 0 6px var(--color-neon-green);
+  animation: sound-bar 1s ease-in-out infinite alternate;
+}
+
+.sound-toggle.is-on .sound-bars i:nth-child(2) { animation-delay: -0.3s; animation-duration: 0.8s; }
+.sound-toggle.is-on .sound-bars i:nth-child(3) { animation-delay: -0.6s; animation-duration: 1.2s; }
+.sound-toggle.is-on .sound-bars i:nth-child(4) { animation-delay: -0.15s; animation-duration: 0.9s; }
+
+@keyframes sound-bar {
+  from { height: 3px; }
+  to { height: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sound-toggle {
+    opacity: 1;
+  }
+
+  .sound-toggle.is-on .sound-bars i {
+    height: 8px;
+  }
+}
