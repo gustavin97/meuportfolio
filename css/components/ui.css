@@ -125,11 +125,30 @@ body.has-custom-cursor select {
   pointer-events: none;
   border-radius: inherit;
   opacity: 0;
-  background: radial-gradient(
-    circle at var(--glare-x, 50%) var(--glare-y, 50%),
-    rgba(255, 255, 255, 0.14),
-    transparent 55%
-  );
+  /*
+    Duas camadas: o brilho branco que segue o cursor e, por baixo,
+    uma película holográfica (faixa verde → azul → roxo) que desliza
+    na direção oposta conforme o card inclina — como cartão foil.
+  */
+  background:
+    radial-gradient(
+      circle at var(--glare-x, 50%) var(--glare-y, 50%),
+      rgba(255, 255, 255, 0.14),
+      transparent 55%
+    ),
+    linear-gradient(
+      115deg,
+      transparent 25%,
+      rgba(0, 255, 136, 0.16) 38%,
+      rgba(0, 191, 255, 0.16) 47%,
+      rgba(138, 43, 226, 0.16) 56%,
+      transparent 70%
+    );
+  background-size: 100% 100%, 260% 260%;
+  background-position:
+    0 0,
+    calc(100% - var(--glare-x, 50%)) calc(100% - var(--glare-y, 50%));
+  mix-blend-mode: screen;
   transition: opacity var(--transition-base);
 }
 
