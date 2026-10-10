@@ -50,6 +50,8 @@ import {
   particlesVertexShader,
 } from './shaders.js';
 import { CHAPTERS, MorphField } from './MorphField.js';
+import { Orbits } from './Orbits.js';
+import { Crystals } from './Crystals.js';
 
 /** Orçamento visual por classe de dispositivo. */
 const TIER_SETTINGS = {
@@ -80,6 +82,10 @@ export class HeroScene {
     this.isVisible = true;
     this.isDisposed = false;
 
+    // Velocidade de scroll normalizada (0..1): alvo cai sozinho, valor segue suave.
+    this.velocityTarget = 0;
+    this.velocity = 0;
+
     // Alvo do mouse vs. valor suavizado — a diferença é o que dá a inércia.
     this.pointer = { x: 0, y: 0 };
     this.pointerTarget = { x: 0, y: 0 };
@@ -95,6 +101,8 @@ export class HeroScene {
     this._initParticles();
     this._initField();
     this._initMorph();
+    this._initOrbits();
+    this._initCrystals();
     this._bindEvents();
     this._positionCoreGroup();
   }
@@ -287,6 +295,18 @@ export class HeroScene {
     this.scene.add(this.morph.group);
   }
 
+  /** Anéis com cometas em volta do núcleo — somem junto com ele. */
+  _initOrbits() {
+    this.orbits = new Orbits({ tier: env.tier, palette: PALETTE, pixelRatio: env.pixelRatio });
+    this.coreGroup.add(this.orbits.group);
+  }
+
+  /** Poliedros que atravessam a página no ritmo do scroll. */
+  _initCrystals() {
+    this.crystals = new Crystals({ tier: env.tier, palette: PALETTE });
+    this.scene.add(this.crystals.group);
+  }
+
   /** Tamanho do plano z=0 visto de uma distância — converte NDC em unidades de mundo. */
   _visibleSize(distance) {
     const height = 2 * distance * Math.tan((this.camera.fov * Math.PI) / 360);
@@ -373,6 +393,11 @@ export class HeroScene {
     this.morphTarget = value;
   }
 
+  /** Velocidade do scroll em px/s (vinda do ScrollTrigger). */
+  setScrollVelocity(pxPerSecond) {
+    this.velocityTarget = Math.max(this.velocityTarget, Math.min(Math.abs(pxPerSecond) / 2500, 1));
+  }
+
   /** Seções do roteiro, na ordem — para quem liga o scroll à cena. */
   get chapters() {
     return CHAPTERS.map((chapter) => chapter.section);
@@ -430,6 +455,21 @@ export class HeroScene {
 
     this.particles.rotation.y += delta * 0.015;
 
+    // O alvo decai sozinho: parar de rolar devolve tudo ao repouso.
+    this.velocityTarget *= Math.exp(-3 * delta);
+    this.velocity += (this.velocityTarget - this.velocity) * (1 - Math.exp(-8 * delta));
+
+    this.orbits.update(delta, elapsed, this.introOpacity * coreFade, this.velocity);
+    const pageScroll = window.scrollY / Math.max(window.innerHeight, 1);
+    this.crystals.update(delta, elapsed, {
+      scroll: pageScroll,
+      velocity: this.velocity,
+      // Discretos no hero (a esfera é a protagonista), plenos depois dele.
+      opacity: this.introOpacity * (0.3 + 0.55 * Math.min(pageScroll, 1)),
+      visibleSize: (distance) => this._visibleSize(distance),
+      cameraZ: this.camera.position.z,
+    });
+
     this.morph.update(this.morphValue, elapsed, this.introOpacity);
     this.morph.group.rotation.y = this.pointer.x * 0.35;
     this.morph.group.rotation.x = this.pointer.y * -0.2;
@@ -460,6 +500,7 @@ export class HeroScene {
     this.particlesMaterial.uniforms.uPixelRatio.value = env.pixelRatio;
     this.fieldMaterial.uniforms.uPixelRatio.value = env.pixelRatio;
     this.morph.setPixelRatio(env.pixelRatio);
+    this.orbits.setPixelRatio(env.pixelRatio);
 
     this._positionCoreGroup();
   }

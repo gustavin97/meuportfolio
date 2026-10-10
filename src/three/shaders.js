@@ -296,3 +296,109 @@ void main() {
   gl_FragColor = vec4(vColor, glow * vAlpha * uOpacity);
 }
 `;
+
+/* ==========================================
+   ÓRBITAS — cometas com rastro
+   ========================================== */
+
+/*
+  A cabeça do cometa está no ângulo uHead; cada ponto do rastro
+  fica aTrail × uLength radianos atrás dela. Com o boost do scroll
+  o rastro estica, como se o cometa ganhasse velocidade.
+*/
+export const orbitVertexShader = /* glsl */ `
+uniform float uTime;
+uniform float uRadius;
+uniform float uHead;
+uniform float uDirection;
+uniform float uLength;
+uniform float uBoost;
+uniform float uSize;
+uniform float uPixelRatio;
+
+attribute float aTrail;
+
+varying float vTrail;
+
+void main() {
+  vTrail = aTrail;
+
+  float angle = uHead - uDirection * aTrail * uLength * (1.0 + uBoost * 0.9);
+  vec3 pos = vec3(cos(angle) * uRadius, 0.0, sin(angle) * uRadius);
+  // O rastro ondula de leve, como poeira deixada para trás.
+  pos.y += sin(angle * 7.0 + uTime * 2.0) * 0.05 * aTrail;
+
+  vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+  gl_Position = projectionMatrix * mvPosition;
+  gl_PointSize = uSize * mix(1.0, 0.2, aTrail) * uPixelRatio * (14.0 / -mvPosition.z);
+}
+`;
+
+export const orbitFragmentShader = /* glsl */ `
+uniform vec3 uColor;
+uniform float uOpacity;
+
+varying float vTrail;
+
+void main() {
+  vec2 uv = gl_PointCoord - 0.5;
+  float dist = length(uv);
+  if (dist > 0.5) discard;
+
+  float glow = pow(1.0 - smoothstep(0.0, 0.5, dist), 1.8);
+  float fade = pow(1.0 - vTrail, 1.7);
+  // A cabeça esquenta para o branco; o rastro fica na cor do anel.
+  vec3 color = mix(uColor, vec3(1.0), pow(1.0 - vTrail, 6.0) * 0.7);
+
+  gl_FragColor = vec4(color, glow * fade * uOpacity);
+}
+`;
+
+/* ==========================================
+   CRISTAIS — poliedros de vidro neon
+   ========================================== */
+
+export const crystalVertexShader = /* glsl */ `
+varying vec3 vNormal;
+varying vec3 vViewPosition;
+varying vec3 vWorldNormal;
+
+void main() {
+  vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+  vViewPosition = -mvPosition.xyz;
+  vNormal = normalize(normalMatrix * normal);
+  vWorldNormal = normalize(mat3(modelMatrix) * normal);
+  gl_Position = projectionMatrix * mvPosition;
+}
+`;
+
+export const crystalFragmentShader = /* glsl */ `
+uniform vec3 uColorA;
+uniform vec3 uColorB;
+uniform float uTime;
+uniform float uOpacity;
+
+varying vec3 vNormal;
+varying vec3 vViewPosition;
+varying vec3 vWorldNormal;
+
+void main() {
+  vec3 normal = normalize(vNormal);
+  vec3 viewDir = normalize(vViewPosition);
+
+  // Bordas acesas, centro transparente: lê como vidro sem refração real.
+  float fresnel = pow(1.0 - clamp(abs(dot(normal, viewDir)), 0.0, 1.0), 2.2);
+
+  // Cada face pega uma "luz" diferente conforme gira — é o que faz faiscar.
+  float facet = dot(vWorldNormal, normalize(vec3(0.5, 0.8, 0.3))) * 0.5 + 0.5;
+  float sparkle = pow(max(dot(vWorldNormal, normalize(vec3(-0.3, 0.6, 0.75))), 0.0), 24.0);
+
+  vec3 color = mix(uColorA, uColorB, facet);
+  color += vec3(1.0) * sparkle * 0.8;
+
+  float shimmer = 0.85 + 0.15 * sin(uTime * 1.5 + facet * 6.0);
+  float alpha = (fresnel * 0.85 + facet * 0.08 + sparkle * 0.6) * shimmer * uOpacity;
+
+  gl_FragColor = vec4(color, alpha);
+}
+`;

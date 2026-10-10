@@ -84,7 +84,16 @@ export function worldMorphScene(heroScene) {
     heroScene.setMorphTarget(target);
   };
 
-  ScrollTrigger.create({ start: 0, end: 'max', onUpdate: sync, onRefresh: sync });
+  ScrollTrigger.create({
+    start: 0,
+    end: 'max',
+    onUpdate: (self) => {
+      sync(self);
+      // A velocidade acelera cometas e gira os cristais.
+      heroScene.setScrollVelocity(self.getVelocity());
+    },
+    onRefresh: sync,
+  });
 }
 
 /** Desenha a linha vertical da jornada conforme o usuário desce. */
