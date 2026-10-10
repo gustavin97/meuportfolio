@@ -11,6 +11,20 @@
 import { env } from '../core/env.js';
 import { gsap } from '../core/gsap.js';
 
+/**
+ * quickTo só aceita propriedade simples; `scale` é atalho para
+ * scaleX + scaleY e gera o aviso "scale not eligible for reset".
+ * Este helper anima os dois eixos juntos.
+ */
+function quickScale(target, options) {
+  const scaleX = gsap.quickTo(target, 'scaleX', options);
+  const scaleY = gsap.quickTo(target, 'scaleY', options);
+  return (value) => {
+    scaleX(value);
+    scaleY(value);
+  };
+}
+
 /** Botões que "puxam" o cursor dentro de um raio. */
 export function initMagneticButtons(scope = document) {
   if (env.isTouch || env.prefersReducedMotion) return;
@@ -72,6 +86,7 @@ export function initInteractions(scope = document) {
   initMagneticButtons(scope);
   initTiltCards(scope);
   initMediaHover(scope);
+  if (scope === document) initMagneticTitle();
 }
 
 /**
@@ -94,7 +109,7 @@ export function initMediaHover(scope = document) {
     const image = card.querySelector('.media-img');
     if (!image) return;
 
-    const zoom = gsap.quickTo(image, 'scale', {
+    const zoom = quickScale(image, {
       duration: 0.6,
       ease: 'guz',
       // O reveal também anima scale; overwrite evita os dois brigando
@@ -104,5 +119,64 @@ export function initMediaHover(scope = document) {
 
     card.addEventListener('pointerenter', () => zoom(1.06));
     card.addEventListener('pointerleave', () => zoom(1));
+  });
+}
+
+/**
+ * Letras do nome no hero reagem ao cursor: as próximas sobem,
+ * giram em direção a ele e acendem. Cada letra calcula a própria
+ * distância, então o efeito "anda" pela palavra junto com o mouse.
+ *
+ * Anima y, rotationY, scale e um --glow — propriedades que a
+ * entrada do SplitText (yPercent, rotateX, opacity) não usa,
+ * para as duas não brigarem. As letras são buscadas a cada
+ * movimento porque o autoSplit recria os spans no resize.
+ */
+export function initMagneticTitle() {
+  if (env.isTouch || env.prefersReducedMotion) return;
+
+  const title = document.querySelector('.hero-title-primary');
+  const hero = document.querySelector('#hero');
+  if (!title || !hero) return;
+
+  const movers = new WeakMap();
+  const getMover = (char) => {
+    if (!movers.has(char)) {
+      const options = { duration: 0.5, ease: 'power3.out' };
+      movers.set(char, {
+        y: gsap.quickTo(char, 'y', options),
+        rotationY: gsap.quickTo(char, 'rotationY', options),
+        scale: quickScale(char, options),
+        glow: gsap.quickTo(char, '--glow', options),
+      });
+    }
+    return movers.get(char);
+  };
+
+  const RADIUS = 260;
+
+  hero.addEventListener('pointermove', (event) => {
+    title.querySelectorAll('.char').forEach((char) => {
+      const rect = char.getBoundingClientRect();
+      const dx = event.clientX - (rect.left + rect.width / 2);
+      const dy = event.clientY - (rect.top + rect.height / 2);
+      // Queda suave: 1 em cima da letra, 0 na borda do raio.
+      const force = Math.max(0, 1 - Math.hypot(dx, dy) / RADIUS) ** 2;
+      const mover = getMover(char);
+      mover.y(-force * 18);
+      mover.rotationY(gsap.utils.clamp(-35, 35, (dx / RADIUS) * 35 * force));
+      mover.scale(1 + force * 0.08);
+      mover.glow(force);
+    });
+  });
+
+  hero.addEventListener('pointerleave', () => {
+    title.querySelectorAll('.char').forEach((char) => {
+      const mover = getMover(char);
+      mover.y(0);
+      mover.rotationY(0);
+      mover.scale(1);
+      mover.glow(0);
+    });
   });
 }

@@ -169,6 +169,14 @@
 .hero-title-primary .char {
   display: inline-block;
   transform-origin: bottom center;
+  /* --glow (0..1) vem do magnetismo do cursor (animations/interactions.js). */
+  --glow: 0;
+  filter: drop-shadow(0 0 calc(var(--glow) * 22px) rgba(0, 255, 136, calc(var(--glow) * 0.7)));
+}
+
+/* Profundidade para o rotationY das letras parecer 3D, não achatado. */
+.hero-title-primary .word {
+  perspective: 600px;
 }
 
 /*
