@@ -315,3 +315,19 @@
 body.is-lightbox-open {
   overflow: hidden;
 }
+
+/* ==================== GLITCH RGB ==================== */
+
+/* Camadas criadas por initImageGlitch (animations/interactions.js). */
+.glitch-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background-size: cover;
+  background-position: center;
+  /* multiply com a cor isola um canal; screen soma esse canal à foto. */
+  background-blend-mode: multiply;
+  mix-blend-mode: screen;
+}

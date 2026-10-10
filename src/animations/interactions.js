@@ -86,6 +86,7 @@ export function initInteractions(scope = document) {
   initMagneticButtons(scope);
   initTiltCards(scope);
   initMediaHover(scope);
+  initImageGlitch(scope);
   if (scope === document) initMagneticTitle();
 }
 
@@ -177,6 +178,58 @@ export function initMagneticTitle() {
       mover.rotationY(0);
       mover.scale(1);
       mover.glow(0);
+    });
+  });
+}
+
+/**
+ * Glitch RGB nas imagens dos projetos: ao entrar no card, duas
+ * cópias da imagem — só o canal vermelho e só o ciano — se
+ * deslocam em fatias horizontais por meio segundo e somem.
+ *
+ * Isolar canal sem canvas: a cópia é pintada com background-color
+ * vermelho em multiply (sobra só o R da foto) e somada à original
+ * com mix-blend-mode: screen. As camadas nascem no primeiro hover.
+ */
+export function initImageGlitch(scope = document) {
+  if (env.isTouch || env.prefersReducedMotion) return;
+
+  scope.querySelectorAll('.project-card').forEach((card) => {
+    const frame = card.querySelector('.media');
+    const image = frame?.querySelector('.media-img');
+    if (!image) return;
+
+    let layers = null;
+    const build = () => {
+      const src = image.currentSrc || image.src;
+      layers = ['#ff0040', '#00f0ff'].map((tint) => {
+        const layer = document.createElement('span');
+        layer.className = 'glitch-layer';
+        layer.setAttribute('aria-hidden', 'true');
+        layer.style.backgroundImage = `url("${src}")`;
+        layer.style.backgroundColor = tint;
+        frame.appendChild(layer);
+        return layer;
+      });
+    };
+
+    // Fatia aleatória: inset(top% 0 bottom% 0).
+    const slice = () => {
+      const top = gsap.utils.random(0, 80, 1);
+      return `inset(${top}% 0% ${gsap.utils.random(0, 100 - top - 8, 1)}% 0%)`;
+    };
+
+    let timeline = null;
+    card.addEventListener('pointerenter', () => {
+      if (image.naturalWidth === 0) return; // fallback sem foto: nada para fatiar
+      if (!layers) build();
+      timeline?.kill();
+      timeline = gsap.timeline();
+      for (let i = 0; i < 6; i += 1) {
+        timeline.set(layers[0], { opacity: 0.9, x: gsap.utils.random(-14, -4), clipPath: slice() }, i * 0.06);
+        timeline.set(layers[1], { opacity: 0.9, x: gsap.utils.random(4, 14), clipPath: slice() }, i * 0.06);
+      }
+      timeline.set(layers, { opacity: 0, x: 0, clipPath: 'inset(0% 0% 0% 0%)' }, 0.38);
     });
   });
 }
