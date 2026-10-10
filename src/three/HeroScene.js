@@ -525,6 +525,8 @@ export class HeroScene {
       opacity: this.introOpacity * (0.3 + 0.55 * Math.min(pageScroll, 1)),
       visibleSize: (distance) => this._visibleSize(distance),
       cameraZ: this.camera.position.z,
+      pointer: this.interaction.uPointer.value,
+      aspect: this.camera.aspect,
     });
 
     this.morph.update(this.morphValue, elapsed, this.introOpacity);

@@ -117,13 +117,15 @@ export class Crystals {
       }
 
       // Alterna os lados; nunca no centro, onde está o texto.
+      // À esquerda ficam o texto alinhado e o HUD: lá os cristais vão
+      // mais fundo e meio para fora da tela, só como sugestão de volume.
       const side = i % 2 === 0 ? 1 : -1;
-      const z = random(-9, -1);
+      const z = side > 0 ? random(-8, -1) : random(-9, -5);
       const item = {
         pivot,
         material,
         edgeMaterial,
-        x: side * random(0.78, 0.98),
+        x: side > 0 ? random(0.82, 0.98) : -random(0.97, 1.06),
         // Espalhados ao longo do ciclo do wrap para não chegarem juntos.
         y: -WRAP_LIMIT + ((i + Math.random() * 0.5) / count) * WRAP_LIMIT * 2,
         z,
@@ -133,6 +135,8 @@ export class Crystals {
         axis: { x: random(-1, 1), y: random(0.4, 1), z: random(-0.5, 0.5) },
         rate: random(0.15, 0.4),
         bob: random(0, Math.PI * 2),
+        hover: 0, // 0..1 proximidade do cursor, suavizada
+        twist: 0, // giro extra acumulado pelo cursor
       };
       pivot.scale.setScalar(item.scale);
       this.items.push(item);
@@ -149,8 +153,10 @@ export class Crystals {
    * @param {number} state.opacity visibilidade global
    * @param {(distance:number)=>{width:number,height:number}} state.visibleSize
    * @param {number} state.cameraZ
+   * @param {{x:number,y:number,z:number}} state.pointer cursor em NDC + presença
+   * @param {number} state.aspect
    */
-  update(delta, elapsed, { scroll, velocity, opacity, visibleSize, cameraZ }) {
+  update(delta, elapsed, { scroll, velocity, opacity, visibleSize, cameraZ, pointer, aspect }) {
     if (!this.items.length) return;
     this.spin += delta * velocity * 3.5;
 
@@ -164,13 +170,22 @@ export class Crystals {
         item.z,
       );
 
-      const angle = elapsed * item.rate + this.spin;
+      // Cursor perto acende e faz o cristal girar, como se fosse tocado.
+      // A posição em tela é aproximada pelas frações: a câmera quase não se move.
+      const dx = (item.x - pointer.x) * aspect;
+      const dy = yFrac - pointer.y;
+      const near = smoothstep(0.45, 0.08, Math.hypot(dx, dy)) * pointer.z;
+      item.hover += (near - item.hover) * (1 - Math.exp(-6 * delta));
+      item.twist += delta * item.hover * 3;
+      item.pivot.scale.setScalar(item.scale * (1 + item.hover * 0.25));
+
+      const angle = elapsed * item.rate + this.spin + item.twist;
       item.pivot.rotation.set(item.axis.x * angle, item.axis.y * angle, item.axis.z * angle);
 
       // Some perto das bordas do wrap e longe: o salto nunca é visto.
       const edgeFade = 1 - smoothstep(1.0, WRAP_LIMIT, Math.abs(yFrac));
       const depthFade = 0.45 + ((item.z + 9) / 8) * 0.55;
-      const alpha = opacity * edgeFade * depthFade;
+      const alpha = opacity * edgeFade * depthFade * (1 + item.hover * 1.6);
 
       item.material.uniforms.uTime.value = elapsed;
       item.material.uniforms.uOpacity.value = alpha;
