@@ -1,0 +1,168 @@
+/*
+  ==========================================
+  HUD.CSS — CAMADA CINEMATOGRÁFICA
+  ==========================================
+  Grão de filme animado, vinheta e painel de capítulos.
+  Tudo decorativo: pointer-events none e aria-hidden.
+  ==========================================
+*/
+
+/* ==================== GRÃO ==================== */
+
+/*
+  Substitui a textura parada: o pseudo-elemento é maior que a tela
+  e salta entre posições em passos secos (steps), como o grão de
+  película que muda a cada quadro. Translate é barato: só composição.
+*/
+body::before {
+  inset: -50%;
+  opacity: 0.055;
+  background-size: 180px 180px;
+  animation: film-grain 0.9s steps(6) infinite;
+  will-change: transform;
+}
+
+@keyframes film-grain {
+  0% { transform: translate(0, 0); }
+  17% { transform: translate(-6%, 4%); }
+  33% { transform: translate(5%, -7%); }
+  50% { transform: translate(-3%, 9%); }
+  67% { transform: translate(8%, 2%); }
+  83% { transform: translate(-8%, -5%); }
+  100% { transform: translate(2%, 6%); }
+}
+
+/* ==================== VINHETA ==================== */
+
+/*
+  Acima do mundo 3D (vem depois dele no DOM, mesmo z-index) e abaixo
+  do conteúdo (z 2): escurece as bordas da cena e puxa o olho para o centro.
+*/
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ==================== PAINEL DE CAPÍTULOS ==================== */
+
+.chapter-hud {
+  position: fixed;
+  left: clamp(16px, 2vw, 32px);
+  /* Centralizado sem transform: o GSAP anima x na entrada. */
+  top: 0;
+  bottom: 0;
+  height: max-content;
+  margin-block: auto;
+  z-index: var(--z-sticky);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  pointer-events: none;
+  font-family: var(--font-secondary);
+  color: var(--color-gray);
+  opacity: 0;
+}
+
+/* Só onde há margem livre: abaixo disso ele cairia sobre o conteúdo. */
+@media (min-width: 1360px) {
+  .chapter-hud {
+    display: flex;
+  }
+}
+
+.chapter-hud-count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+/* Janela do odômetro: recorta o número que rola. */
+.chapter-hud-window {
+  display: block;
+  overflow: hidden;
+  height: 1.1em;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-white);
+}
+
+.chapter-hud-index {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  background: var(--gradient-green-blue);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.chapter-hud-total {
+  margin-top: 4px;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+.chapter-hud-track {
+  position: relative;
+  width: 2px;
+  height: 160px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.chapter-hud-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--color-neon-green), var(--color-neon-blue), var(--color-neon-purple));
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.45);
+  transform-origin: top center;
+  transform: scaleY(0);
+}
+
+.chapter-hud-tick {
+  position: absolute;
+  left: 50%;
+  top: var(--at, 0%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: var(--color-black);
+  transform: translate(-50%, -50%);
+  transition: border-color 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.chapter-hud-tick.is-passed {
+  border-color: var(--color-neon-green);
+  background: var(--color-neon-green);
+  box-shadow: 0 0 8px var(--color-neon-green);
+}
+
+/* Nome da seção na vertical, lido de baixo para cima. */
+.chapter-hud-label {
+  min-height: 7em;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+
+  .chapter-hud {
+    opacity: 1;
+  }
+}
