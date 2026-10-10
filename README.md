@@ -101,17 +101,17 @@ geometria e pixel ratio.
 o Lenis não inicializa, nenhum ScrollTrigger é criado e o WebGL nem carrega.
 
 **O mundo reage a quem visita.** As partículas abrem caminho para o cursor e um
-clique solta uma onda de choque (uniforms compartilhados em ).
+clique solta uma onda de choque (uniforms compartilhados em `HeroScene._initInteraction`).
 A velocidade do scroll acelera cometas, gira cristais, acende a poeira e a aurora.
-Enviar o formulário faz o avião de papel decolar (evento ).
+Enviar o formulário faz o avião de papel decolar (evento `portfolio:launch`).
 
 **Som é opt-in.** A trilha ambiente é sintetizada com Web Audio (nenhum arquivo
 baixado) e só começa no clique do botão "Som", no canto inferior esquerdo.
 
-**Easter egg.** Digite  na página (fora do formulário) ou o código Konami
+**Easter egg.** Digite `guz` na página (fora do formulário) ou o código Konami
 para um salto no hiperespaço. O console dá a dica.
 
-**Skill de animação.**  documenta as regras de
+**Skill de animação.** `.claude/skills/immersive-motion` documenta as regras de
 motion e WebGL do projeto (um rAF só, damping por delta, orçamento por tier,
 reduced motion). Use-a ao criar efeitos novos com o Claude Code.
 
