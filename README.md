@@ -56,13 +56,18 @@ src/
     HeroScene.js        Mundo 3D fixo: esfera do hero, poeira e nuvem de formas
     MorphField.js       Roteiro seção → forma (CHAPTERS) e a troca entre elas
     shapes.js           As formas: esfera, logo, hélice, anéis, átomo, globo, cubo, avião
-    shaders.js          GLSL (ruído simplex, fresnel, partículas, morph)
+    Orbits.js           Anéis com cometas em volta da esfera do hero
+    Crystals.js         Poliedros de vidro à deriva nas laterais, reagem ao cursor
+    Aurora.js           Cortinas de luz ao fundo, tom acompanha o capítulo
+    shaders.js          GLSL (ruído, fresnel, partículas, morph, órbitas, cristais, aurora, interação)
   animations/
     reveal.js           [data-reveal] [data-split] [data-counter] [data-scramble], títulos cinéticos
     media.js            Wipe das imagens, parallax, fundos de seção, skew por velocidade
     scroll-scenes.js    Timeline, projetos horizontais, faixa cinética, vínculo com o 3D
-    interactions.js     Botões magnéticos, tilt dos cards
-  components/           header, form, preloader, icons, cursor, lightbox
+    interactions.js     Botões magnéticos, tilt dos cards, letras magnéticas, glitch RGB
+    footer.js           Assinatura gigante do rodapé com holofote
+  components/           header, form, preloader, icons, cursor, lightbox,
+                        hud (capítulos), sound (trilha sintetizada), easter-egg
   sections/render.js    Gera o HTML das seções a partir dos dados
   utils/dom.js          Template com escape + fallback de mídia
 css/                    global/ · layout/ · sections/ · components/
@@ -94,6 +99,21 @@ geometria e pixel ratio.
 
 **`prefers-reduced-motion` é respeitado de verdade.** Não é só desligar transição:
 o Lenis não inicializa, nenhum ScrollTrigger é criado e o WebGL nem carrega.
+
+**O mundo reage a quem visita.** As partículas abrem caminho para o cursor e um
+clique solta uma onda de choque (uniforms compartilhados em ).
+A velocidade do scroll acelera cometas, gira cristais, acende a poeira e a aurora.
+Enviar o formulário faz o avião de papel decolar (evento ).
+
+**Som é opt-in.** A trilha ambiente é sintetizada com Web Audio (nenhum arquivo
+baixado) e só começa no clique do botão "Som", no canto inferior esquerdo.
+
+**Easter egg.** Digite  na página (fora do formulário) ou o código Konami
+para um salto no hiperespaço. O console dá a dica.
+
+**Skill de animação.**  documenta as regras de
+motion e WebGL do projeto (um rAF só, damping por delta, orçamento por tier,
+reduced motion). Use-a ao criar efeitos novos com o Claude Code.
 
 **Acessibilidade.** Skip link, foco visível, `inert` no menu fechado, `aria-invalid`
 + `role="alert"` no formulário, e o título fatiado pelo SplitType ganha `aria-label`
