@@ -53,6 +53,7 @@ import {
 import { CHAPTERS, MorphField } from './MorphField.js';
 import { Orbits } from './Orbits.js';
 import { Crystals } from './Crystals.js';
+import { Aurora } from './Aurora.js';
 
 /** Orçamento visual por classe de dispositivo. */
 const TIER_SETTINGS = {
@@ -105,6 +106,7 @@ export class HeroScene {
     this._initMorph();
     this._initOrbits();
     this._initCrystals();
+    this._initAurora();
     this._bindEvents();
     this._positionCoreGroup();
   }
@@ -335,6 +337,12 @@ export class HeroScene {
     this.scene.add(this.crystals.group);
   }
 
+  /** Cortinas de luz bem ao fundo, atrás de todo o resto. */
+  _initAurora() {
+    this.aurora = new Aurora({ tier: env.tier, palette: PALETTE });
+    this.scene.add(this.aurora.group);
+  }
+
   /** Tamanho do plano z=0 visto de uma distância — converte NDC em unidades de mundo. */
   _visibleSize(distance) {
     const height = 2 * distance * Math.tan((this.camera.fov * Math.PI) / 360);
@@ -517,6 +525,8 @@ export class HeroScene {
 
     this.particles.rotation.y += delta * 0.015;
 
+    // Tom da aurora acompanha a história: 0 no hero, 1 no contato.
+    this.aurora.update(elapsed, this.introOpacity, this.morphValue / (CHAPTERS.length - 1), this.velocity);
     this.orbits.update(delta, elapsed, this.introOpacity * coreFade, this.velocity);
     this.crystals.update(delta, elapsed, {
       scroll: pageScroll,

@@ -175,7 +175,7 @@ float applyScreenInteraction(inout vec4 clip, float strength) {
   // Cursor: empurra para fora num raio pequeno, como mão na água.
   vec2 toPointer = (ndc - uPointer.xy) * aspect;
   float pointerDist = length(toPointer) + 1e-4;
-  float push = smoothstep(0.32, 0.0, pointerDist) * uPointer.z;
+  float push = (1.0 - smoothstep(0.0, 0.32, pointerDist)) * uPointer.z;
 
   // Onda: anel que se expande a partir do clique e perde força.
   vec2 toShock = (ndc - uShock.xy) * aspect;
@@ -461,6 +461,67 @@ void main() {
   float shimmer = 0.85 + 0.15 * sin(uTime * 1.5 + facet * 6.0);
   float alpha = (fresnel * 0.85 + facet * 0.08 + sparkle * 0.6) * shimmer * uOpacity;
 
+  gl_FragColor = vec4(color, alpha);
+}
+`;
+
+/* ==========================================
+   AURORA — cortinas de luz ao fundo
+   ========================================== */
+
+export const auroraVertexShader = /* glsl */ `
+uniform float uTime;
+uniform float uSeed;
+
+varying vec2 vUv;
+varying float vFold;
+
+${simplexNoise3D}
+
+void main() {
+  vUv = uv;
+  vec3 pos = position;
+
+  // Onda larga e lenta + dobra fina: a cortina balança e se enruga.
+  float t = uTime * 0.06;
+  float wave = snoise(vec3(pos.x * 0.05, t, uSeed)) * 3.0;
+  float fold = snoise(vec3(pos.x * 0.22, t * 2.0, uSeed + 3.0));
+  pos.y += wave + sin(pos.x * 0.12 + uTime * 0.2 + uSeed) * 1.2;
+  pos.z += fold * 2.5 * uv.y;
+  vFold = fold;
+
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+}
+`;
+
+export const auroraFragmentShader = /* glsl */ `
+uniform float uTime;
+uniform float uSeed;
+uniform float uOpacity;
+uniform float uShift;
+uniform vec3 uColorA;
+uniform vec3 uColorB;
+uniform vec3 uColorC;
+
+varying vec2 vUv;
+varying float vFold;
+
+void main() {
+  // Base acesa e topo se dissolvendo — o desenho da cortina.
+  float curtain = smoothstep(0.0, 0.12, vUv.y) * pow(1.0 - vUv.y, 1.8);
+
+  // Estrias verticais que correm devagar ao longo da faixa.
+  float rays = 0.55 + 0.45 * sin(vUv.x * 140.0 + vFold * 4.0 + uTime * 0.4 + uSeed);
+  rays *= 0.7 + 0.3 * sin(vUv.x * 37.0 - uTime * 0.25);
+
+  // Some nas pontas para a faixa não terminar num corte reto.
+  float ends = smoothstep(0.0, 0.18, vUv.x) * (1.0 - smoothstep(0.82, 1.0, vUv.x));
+
+  vec3 color = mix(uColorA, uColorB, smoothstep(0.2, 0.8, vUv.x + vFold * 0.25));
+  // Ao longo da página o tom migra para o roxo.
+  color = mix(color, uColorC, uShift * 0.6);
+
+  float alpha = curtain * rays * ends * 0.6 * uOpacity;
   gl_FragColor = vec4(color, alpha);
 }
 `;
